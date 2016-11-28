@@ -208,7 +208,7 @@ sed -i s/QS_SGA_VALUE/${SGA_VALUE}/g /tmp/*.rsp
 sed -i s/QS_DATABASE_PORT/${DATABASE_PORT}/g /tmp/*.ora /tmp/*.rsp /tmp/*.sql
 sed -i s/QS_PRIMARY_IP/${PRIMARY_IP}/g /tmp/*.ora /tmp/*.sql
 sed -i s/QS_STANDBY_IP/${STANDBY_IP}/g /tmp/*.ora /tmp/*.sql
-if [[ ${OS_CODE} == 'OL76HVM' ]]; then
+if [[ ${OS_CODE} == 'OL67HVM' ]]; then
     configOL67HVM
 elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
     configRHEL72HVM
@@ -338,7 +338,12 @@ else
     exit 1
 fi
 # Install ASM Modules
-install_packages kmod-oracleasm
+if [[ ${OS_CODE} == 'OL67HVM' ]]; then
+    install_packages kmod-oracleasm
+elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
+    curl -O ftp://mirror.switch.ch/pool/4/mirror/scientificlinux/7.2/x86_64/os/Packages/kmod-oracleasm-2.0.8-15.el7.x86_64.rpm
+    yum -y localinstall kmod-oracleasm-2.0.8-15.el7.x86_64.rpm
+fi
 rpm -Uvh oracleasm-support-2.1.8-1.el6.x86_64.rpm
 rpm -Uvh oracleasmlib-2.0.4-1.el6.x86_64.rpm
 # Change permission to oracle:oinstall for filesystem /u01
