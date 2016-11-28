@@ -341,8 +341,7 @@ fi
 if [[ ${OS_CODE} == 'OL67HVM' ]]; then
     install_packages kmod-oracleasm
 elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
-    curl -O ftp://mirror.switch.ch/pool/4/mirror/scientificlinux/7.2/x86_64/os/Packages/kmod-oracleasm-2.0.8-15.el7.x86_64.rpm
-    yum -y localinstall kmod-oracleasm-2.0.8-15.el7.x86_64.rpm
+    yum install -y kmod-oracleasm-2.0.8-15.el7.x86_64
 fi
 rpm -Uvh oracleasm-support-2.1.8-1.el6.x86_64.rpm
 rpm -Uvh oracleasmlib-2.0.4-1.el6.x86_64.rpm
