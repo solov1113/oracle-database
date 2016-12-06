@@ -542,51 +542,54 @@
         "AWSAMIRegionMap": {
             "AMI": {
                 "OL67HVM": "Oracle Linux 6.7 x86_64 HVM Base v5-e91f91bf-500d-4da2-9495-a9f2f051f3cc-ami-4a706a20.3",
-                "RHEL72HVM": "RHEL-7.2_HVM-20160301-x86_64-3-Hourly2-GP2"
+                "RHEL72HVM": "RHEL-7.2_HVM-20161025-x86_64-1-Hourly2-GP2"
             },
             "ap-northeast-1": {
                 "OL67HVM": "ami-39628658",
-                "RHEL72HVM": "ami-a05854ce"
+                "RHEL72HVM": "ami-2265c543"
             },
             "ap-northeast-2": {
                 "OL67HVM": "ami-40569e2e",
-                "RHEL72HVM": "ami-d35d93bd"
+                "RHEL72HVM": "ami-a9e532c7"
             },
             "ap-south-1": {
                 "OL67HVM": "ami-b2670ddd",
-                "RHEL72HVM": "ami-cdbdd7a2"
+                "RHEL72HVM": "ami-917205fe"
             },
             "ap-southeast-1": {
                 "OL67HVM": "ami-d48b5db7",
-                "RHEL72HVM": "ami-dccc04bf"
+                "RHEL72HVM": "ami-22953841"
             },
             "ap-southeast-2": {
                 "OL67HVM": "ami-1fd1fd7c",
-                "RHEL72HVM": "ami-286e4f4b"
+                "RHEL72HVM": "ami-91cdf0f2"
             },
             "eu-central-1": {
                 "OL67HVM": "ami-a6db36c9",
-                "RHEL72HVM": "ami-b6688dd9"
+                "RHEL72HVM": "ami-7def1712"
             },
             "eu-west-1": {
                 "OL67HVM": "ami-b48a00c7",
-                "RHEL72HVM": "ami-ce66d8bd"
+                "RHEL72HVM": "ami-b22961c1"
             },
             "sa-east-1": {
                 "OL67HVM": "ami-c03db4ac",
-                "RHEL72HVM": "ami-2b068447"
+                "RHEL72HVM": "ami-28f66a44"
             },
             "us-east-1": {
                 "OL67HVM": "ami-0511fc68",
-                "RHEL72HVM": "ami-85241def"
+                "RHEL72HVM": "ami-873e6190"
+            },
+            "us-east-2": {
+                "RHEL72HVM": "ami-0a33696f"
             },
             "us-west-1": {
                 "OL67HVM": "ami-9a92ebfa",
-                "RHEL72HVM": "ami-f7eb9b97"
+                "RHEL72HVM": "ami-f88fc498"
             },
             "us-west-2": {
                 "OL67HVM": "ami-09ea1769",
-                "RHEL72HVM": "ami-a3fa16c3"
+                "RHEL72HVM": "ami-5dd3743d"
             }
         },
         "AWSInfoRegionMap": {
@@ -623,6 +626,10 @@
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             },
             "us-east-1": {
+                "Partition": "aws",
+                "QuickStartS3URL": "https://s3.amazonaws.com"
+            },
+            "us-east-2": {
                 "Partition": "aws",
                 "QuickStartS3URL": "https://s3.amazonaws.com"
             },
