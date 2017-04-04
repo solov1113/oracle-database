@@ -57,15 +57,11 @@
     },
     {
         "ParameterKey": "InstallBucketName",
-        "ParameterValue": "quickstart-ci-media/oracle/database/12"
+        "ParameterValue": "$[alfred_getmediabucket]/oracle/database/12"
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "cikey"
-    },
-    {
-        "ParameterKey": "NATInstanceType",
-        "ParameterValue": "t2.small"
+        "ParameterValue": "$[alfred_getkeypair]"
     },
     {
         "ParameterKey": "OracleAMIOS",
