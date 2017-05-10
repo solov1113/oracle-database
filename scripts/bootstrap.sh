@@ -44,6 +44,13 @@ function configOL67HVM() {
     sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
 }
 
+function configOL73HVM() {
+    sed -i 's/4096/16384/g' /etc/security/limits.d/20-nproc.conf
+    sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
+    service iptables stop
+    systemctl disable iptables.service
+}
+
 function configRHEL72HVM() {
     sed -i 's/4096/16384/g' /etc/security/limits.d/20-nproc.conf
     sed -i 's/SELINUX=enforcing/SELINUX=permissive/g' /etc/selinux/config
@@ -129,6 +136,7 @@ OSB_AWS_KEY='NONE'
 OSB_AWS_SECRET='NONE'
 OSB_OTN_USER='NONE'
 OSB_OTN_PASS='NONE'
+ORACLE_VERSION='NONE'
 
 if [ -f ${PARAMS_FILE} ]; then
     QS_S3_URL=`grep 'QuickStartS3URL' ${PARAMS_FILE} | awk -F'|' '{print $2}' | sed -e 's/^ *//g;s/ *$//g'`
@@ -153,6 +161,7 @@ if [ -f ${PARAMS_FILE} ]; then
     OSB_AWS_SECRET=`grep 'OSBSecret' ${PARAMS_FILE} | awk -F'|' '{print $2}' | sed -e 's/^ *//g;s/ *$//g'`
     OSB_OTN_USER=`grep 'OSBOTN' ${PARAMS_FILE} | awk -F'|' '{print $2}' | sed -e 's/^ *//g;s/ *$//g'`
     OSB_OTN_PASS=`grep 'OSBPass' ${PARAMS_FILE} | awk -F'|' '{print $2}' | sed -e 's/^ *//g;s/ *$//g'`
+    ORACLE_VERSION=`grep 'OracleVersion' ${PARAMS_FILE} | awk -F'|' '{print $2}' | sed -e 's/^ *//g;s/ *$//g'`
 
     # Strip leading slash
     if [[ ${QS_S3_KEY_PREFIX} == /* ]];then
@@ -191,6 +200,7 @@ if [[ ${VERBOSE} == 'true' ]]; then
     echo "OSB_AWS_SECRET = ${OSB_AWS_SECRET}"
     echo "OSB_OTN_USER = ${OSB_OTN_USER}"
     echo "OSB_OTN_PASS = ${OSB_OTN_PASS}"
+    echo "ORACLE_VERSION = ${ORACLE_VERSION}"
 fi
 
 
@@ -212,6 +222,8 @@ if [[ ${OS_CODE} == 'OL67HVM' ]]; then
     configOL67HVM
 elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
     configRHEL72HVM
+elif [[ ${OS_CODE} == 'OL73HVM' ]]; then
+    configOL73HVM
 fi
 # Update Kernel parameters to Oracle Documentation recommended values
 cp /etc/sysctl.conf /etc/sysctl.conf_backup
@@ -259,8 +271,8 @@ echo DEBUGfdisk
 mkfs -t ext4 /dev/xvdb1
 echo '/dev/xvdb1 /u01   ext4    defaults,noatime  1   1'>>/etc/fstab
 mount /u01
-mkdir -p /u01/app/oracle/product/12.1.0.2/db_1
-mkdir -p /u01/app/oracle/product/12.1.0.2/grid
+mkdir -p /u01/app/oracle/product/12c/db_1
+mkdir -p /u01/app/oracle/product/12c/grid
 mkdir -p /u01/install
 if df -k | grep u01 ; then
     echo "QS_U01_FS|SUCCESS"
@@ -303,12 +315,25 @@ fi
 echo QS_File_Systems_Mounted
 # Download Oracle Binaries
 echo QS_BEGIN_media_download
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_database_1of2.zip /u01/install/linuxamd64_12102_database_1of2.zip >> /tmp/download.log
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_database_2of2.zip /u01/install/linuxamd64_12102_database_2of2.zip >> /tmp/download.log
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_grid_1of2.zip /u01/install/linuxamd64_12102_grid_1of2.zip >> /tmp/download.log
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_grid_2of2.zip /u01/install/linuxamd64_12102_grid_2of2.zip >> /tmp/download.log
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasm-support-2.1.8-1.el6.x86_64.rpm /u01/install/oracleasm-support-2.1.8-1.el6.x86_64.rpm >> /tmp/download.log
-aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasmlib-2.0.4-1.el6.x86_64.rpm /u01/install/oracleasmlib-2.0.4-1.el6.x86_64.rpm >> /tmp/download.log
+if [[ ${ORACLE_VERSION} == '12.1.0.2' ]]; then
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_database_1of2.zip /u01/install/linuxamd64_12102_database_1of2.zip >> /tmp/download.log
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_database_2of2.zip /u01/install/linuxamd64_12102_database_2of2.zip >> /tmp/download.log
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_grid_1of2.zip /u01/install/linuxamd64_12102_grid_1of2.zip >> /tmp/download.log
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxamd64_12102_grid_2of2.zip /u01/install/linuxamd64_12102_grid_2of2.zip >> /tmp/download.log
+fi
+if [[ ${ORACLE_VERSION} == '12.2.0.1' ]]; then
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxx64_12201_database.zip /u01/install/linuxx64_12201_database.zip >> /tmp/download.log
+  aws s3 cp s3://${INSTALLER_S3_BUCKET}/linuxx64_12201_grid_home.zip /u01/install/linuxx64_12201_grid_home.zip >> /tmp/download.log
+fi
+if [[ ${OS_CODE} == 'OL67HVM' ]]; then
+    aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasm-support-2.1.8-1.el6.x86_64.rpm /u01/install/oracleasm-support-2.1.8-1.el6.x86_64.rpm >> /tmp/download.log
+    aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasmlib-2.0.4-1.el6.x86_64.rpm /u01/install/oracleasmlib-2.0.4-1.el6.x86_64.rpm >> /tmp/download.log
+elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
+    aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasm-support-2.1.8-1.el6.x86_64.rpm /u01/install/oracleasm-support-2.1.8-1.el6.x86_64.rpm >> /tmp/download.log
+    aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasmlib-2.0.4-1.el6.x86_64.rpm /u01/install/oracleasmlib-2.0.4-1.el6.x86_64.rpm >> /tmp/download.log
+elif [[ ${OS_CODE} == 'OL73HVM' ]]; then
+    aws s3 cp s3://${INSTALLER_S3_BUCKET}/oracleasmlib-2.0.12-1.el7.x86_64.rpm /u01/install/oracleasmlib-2.0.12-1.el7.x86_64.rpm >> /tmp/download.log
+fi
 echo QS_END_media_download
 # Copy files from shared Filesystem from PRIMARY to STANDBY instance
 cd /u01/install
@@ -320,10 +345,16 @@ if [[ ${HOST_TYPE} == 'STANDBY' ]]; then
 fi
 echo QS_FilesDownloaded
 # Unzip Oracle Binaries for Installation
-unzip -q linuxamd64_12102_database_1of2.zip
-unzip -q linuxamd64_12102_database_2of2.zip
-unzip -q linuxamd64_12102_grid_1of2.zip
-unzip -q linuxamd64_12102_grid_2of2.zip
+if [[ ${ORACLE_VERSION} == '12.1.0.2' ]]; then
+  unzip -q linuxamd64_12102_database_1of2.zip
+  unzip -q linuxamd64_12102_database_2of2.zip
+  unzip -q linuxamd64_12102_grid_1of2.zip
+  unzip -q linuxamd64_12102_grid_2of2.zip
+fi
+if [[ ${ORACLE_VERSION} == '12.2.0.1' ]]; then
+  unzip -q linuxx64_12201_database.zip
+  unzip -q linuxx64_12201_grid_home.zip -d /u01/app/oracle/product/12c/grid/
+fi
 cd /u01/install
 if ls -l /u01/install/database/runInstaller ; then
     echo "QS_ORA_INSTALL_UNZIP|SUCCESS"
@@ -331,20 +362,36 @@ else
     echo "QS_ORA_INSTALL_UNZIP|FAILURE"
     exit 1
 fi
-if ls -l /u01/install/grid/runInstaller ; then
+if [[ ${ORACLE_VERSION} == '12.1.0.2' ]]; then
+  if ls -l /u01/install/grid/runInstaller ; then
     echo "QS_GRID_INSTALL_UNZIP|SUCCESS"
-else
+  else
     echo "QS_GRID_INSTALL_UNZIP|FAILURE"
     exit 1
+  fi
+fi
+if [[ ${ORACLE_VERSION} == '12.2.0.1' ]]; then
+  if ls -l /u01/app/oracle/product/12c/grid/gridSetup.sh ; then
+    echo "QS_GRID_INSTALL_UNZIP|SUCCESS"
+  else
+    echo "QS_GRID_INSTALL_UNZIP|FAILURE"
+    exit 1
+  fi
 fi
 # Install ASM Modules
 if [[ ${OS_CODE} == 'OL67HVM' ]]; then
     install_packages kmod-oracleasm
+    rpm -Uvh oracleasm-support-2.1.8-1.el6.x86_64.rpm
+    rpm -Uvh oracleasmlib-2.0.4-1.el6.x86_64.rpm
+elif [[ ${OS_CODE} == 'OL73HVM' ]]; then
+    install_packages kmod-oracleasm
+    install_packages oracleasm-support
+    rpm -Uvh oracleasmlib-2.0.12-1.el7.x86_64.rpm
 elif [[ ${OS_CODE} == 'RHEL72HVM' ]]; then
     yum install -y kmod-oracleasm-2.0.8-15.el7.x86_64
+    rpm -Uvh oracleasm-support-2.1.8-1.el6.x86_64.rpm
+    rpm -Uvh oracleasmlib-2.0.4-1.el6.x86_64.rpm
 fi
-rpm -Uvh oracleasm-support-2.1.8-1.el6.x86_64.rpm
-rpm -Uvh oracleasmlib-2.0.4-1.el6.x86_64.rpm
 # Change permission to oracle:oinstall for filesystem /u01
 chown -R oracle:oinstall /u01
 chmod -R 775 /u01
@@ -422,16 +469,16 @@ install_packages ${YUM_PACKAGES[@]}
 echo 'export TMP=/tmp' >>/home/oracle/.bash_profile
 echo 'export TMPDIR=/tmp' >>/home/oracle/.bash_profile
 echo 'export ORACLE_BASE=/u01/app/oracle' >>/home/oracle/.bash_profile
-echo 'export ORACLE_HOME=/u01/app/oracle/product/12.1.0.2/db_1' >>/home/oracle/.bash_profile
+echo 'export ORACLE_HOME=/u01/app/oracle/product/12c/db_1' >>/home/oracle/.bash_profile
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
     echo export ORACLE_SID=${PRIMARY_NAME} >>/home/oracle/.bash_profile
 elif [[ ${HOST_TYPE} == 'STANDBY' ]]; then
     echo export ORACLE_SID=${STANDBY_NAME} >>/home/oracle/.bash_profile
 fi
 echo 'export PATH=/usr/sbin:$PATH' >>/home/oracle/.bash_profile
-echo 'export PATH=/u01/app/oracle/product/12.1.0.2/db_1/bin:$PATH' >>/home/oracle/.bash_profile
-echo 'export LD_LIBRARY_PATH=/u01/app/oracle/product/12.1.0.2/db_1/lib:/lib:/usr/lib' >>/home/oracle/.bash_profile
-echo 'export CLASSPATH=/u01/app/oracle/product/12.1.0.2/db_1/jlib:/u01/app/oracle/product/12.1.0.2/db_1/rdbms/jlib' >>/home/oracle/.bash_profile
+echo 'export PATH=/u01/app/oracle/product/12c/db_1/bin:$PATH' >>/home/oracle/.bash_profile
+echo 'export LD_LIBRARY_PATH=/u01/app/oracle/product/12c/db_1/lib:/lib:/usr/lib' >>/home/oracle/.bash_profile
+echo 'export CLASSPATH=/u01/app/oracle/product/12c/db_1/jlib:/u01/app/oracle/product/12c/db_1/rdbms/jlib' >>/home/oracle/.bash_profile
 # Make a SWAP space available and update fsta
 mkswap /dev/xvdx
 swapon /dev/xvdx
@@ -448,9 +495,9 @@ touch /tmp/oracleexec.log
 chown oracle:dba /tmp/oracleexec.*
 echo QS_BEGIN_oracleexec.sh
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
-    sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2}' -- ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} &> /tmp/oracleexec.log
+    sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2} ${3}' -- ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${ORACLE_VERSION} &> /tmp/oracleexec.log
 elif [[ ${HOST_TYPE} == 'STANDBY' ]]; then
-    sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2} ${3} ${4}' -- ${DATABASE_PASS} ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${STANDBY_NAME} &> /tmp/oracleexec.log
+    sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2} ${3} ${4} ${5}' -- ${DATABASE_PASS} ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${STANDBY_NAME} ${ORACLE_VERSION} &> /tmp/oracleexec.log
 fi
 echo QS_END_oracleexec.sh
 # Check ASM instance Status
@@ -500,8 +547,8 @@ sed -i 's/!requiretty/requiretty/g' /etc/sudoers
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
     cp /tmp/stby.ctl /shared/.
     cp /tmp/stby.ora /shared/.
-    cp /u01/app/oracle/product/12.1.0.2/db_1/network/admin/tnsnames.ora /shared/.
-    cp /u01/app/oracle/product/12.1.0.2/db_1/dbs/orapw${PRIMARY_NAME} /shared/.
+    cp /u01/app/oracle/product/12c/db_1/network/admin/tnsnames.ora /shared/.
+    cp /u01/app/oracle/product/12c/db_1/dbs/orapw${PRIMARY_NAME} /shared/.
     chown -R oracle:oinstall /shared
     chmod 777 -R /shared/
 fi
