@@ -8,24 +8,12 @@
         "ParameterValue": "$[alfred_genaz_2]"
     },
     {
-        "ParameterKey": "Bastion1InstanceType",
+        "ParameterKey": "BastionInstanceType",
         "ParameterValue": "t2.micro"
-    },
-    {
-        "ParameterKey": "Bastion1PrivateIP",
-        "ParameterValue": "10.0.128.5"
-    },
-    {
-        "ParameterKey": "Bastion2InstanceType",
-        "ParameterValue": "t2.micro"
-    },
-    {
-        "ParameterKey": "Bastion2PrivateIP",
-        "ParameterValue": "10.0.144.5"
     },
     {
         "ParameterKey": "BastionAMIOS",
-        "ParameterValue": "AmazonLinuxHVM"
+        "ParameterValue": "Amazon-Linux-HVM"
     },
     {
         "ParameterKey": "CharacterSet",
@@ -37,7 +25,7 @@
     },
     {
         "ParameterKey": "DataVolumeType",
-        "ParameterValue": "io1"
+        "ParameterValue": "gp2"
     },
     {
         "ParameterKey": "DatabaseName",
@@ -53,7 +41,7 @@
     },
     {
         "ParameterKey": "DataGuardConfig",
-        "ParameterValue": "Single"
+        "ParameterValue": "Data Guard"
     },
     {
         "ParameterKey": "DomainName",
@@ -69,19 +57,15 @@
     },
     {
         "ParameterKey": "InstallBucketName",
-        "ParameterValue": "quickstart-ci-media/oracle/database/12"
+        "ParameterValue": "$[alfred_getmediabucket]/oracle/database/12"
     },
     {
         "ParameterKey": "KeyPairName",
-        "ParameterValue": "cikey"
-    },
-    {
-        "ParameterKey": "NATInstanceType",
-        "ParameterValue": "t2.small"
+        "ParameterValue": "$[alfred_getkeypair]"
     },
     {
         "ParameterKey": "OracleAMIOS",
-        "ParameterValue": "RedHatEnterpriseLinux72HVM"
+        "ParameterValue": "Red-Hat-Enterprise-Linux-7.2-HVM"
     },
     {
         "ParameterKey": "OracleInstanceType",
@@ -137,7 +121,7 @@
     },
     {
         "ParameterKey": "RecoVolumeType",
-        "ParameterValue": "io1"
+        "ParameterValue": "gp2"
     },
     {
         "ParameterKey": "RemoteAccessCIDR",

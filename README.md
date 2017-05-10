@@ -1,4 +1,4 @@
-#quickstart-oracle-database
+# quickstart-oracle-database
 
 This Quick Start provides a reliable and automated way to install and configure Oracle Database 12c Enterprise Edition on AWS with high availability.
 
