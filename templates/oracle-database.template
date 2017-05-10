@@ -175,7 +175,7 @@
     },
     "Parameters": {
         "AsmPass": {
-            "AllowedPattern": "([A-Za-z0-9_#$&]{3,30})",
+            "AllowedPattern": "([A-Za-z0-9_#&]{3,30})",
             "ConstraintDescription": "Input your ASM Password, Min 3, Maximum of 30 characters.",
             "Description": "Enter your ASM Password, Min 3, maximum of 30 characters. This password is used for the SYSASM, ASM Monitor, and ASM EM admin users of Oracle ASM.",
             "NoEcho": "true",
@@ -244,7 +244,7 @@
             "Type": "String"
         },
         "DatabasePass": {
-            "AllowedPattern": "([A-Za-z0-9_#$&]{3,30})",
+            "AllowedPattern": "([A-Za-z0-9_#$]{3,30})",
             "ConstraintDescription": "Input your database Password, Min 3, Maximum of 30 characters.",
             "Description": "Enter your Database Password, Min 3, maximum of 30 characters. This password is used for the SYS, SYSTEM, and DBSNMP users of Oracle Database.",
             "NoEcho": "true",
@@ -301,11 +301,11 @@
         },
         "OracleAMIOS": {
             "AllowedValues": [
-                "Red-Hat-Enterprise-Linux-7.2-HVM",
-                "Oracle-Linux-6.7-HVM",
-                "Oracle-Linux-7.3-HVM"
+                "RedHatEnterpriseLinux72HVM",
+                "OracleLinux67HVM",
+                "OracleLinux73HVM"
             ],
-            "Default": "Red-Hat-Enterprise-Linux-7.2-HVM",
+            "Default": "RedHatEnterpriseLinux72HVM",
             "Description": "Operating system and version for database nodes.",
             "Type": "String"
         },
@@ -727,15 +727,15 @@
             }
         },
         "OracleAMINameMap": {
-            "Red-Hat-Enterprise-Linux-7.2-HVM": {
+            "RedHatEnterpriseLinux72HVM": {
                 "Code": "RHEL72HVM",
                 "repo": "#already come with repo"
             },
-            "Oracle-Linux-6.7-HVM": {
+            "OracleLinux67HVM": {
                 "Code": "OL67HVM",
                 "repo": "curl -O http://public-yum.oracle.com/public-yum-ol6.repo"
             },
-            "Oracle-Linux-7.3-HVM": {
+            "OracleLinux73HVM": {
                 "Code": "OL73HVM",
                 "repo": "#already come with repo"
             }
