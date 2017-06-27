@@ -1,6 +1,7 @@
 connect / as sysdba
 set pages 1000 line 150
 spool /tmp/dbsetup.log
+alter system set db_recovery_file_dest_size='2G' scope=both;
 alter system set db_recovery_file_dest='+RECO' scope=both;
 ALTER DATABASE FORCE LOGGING;
 ALTER DATABASE ADD LOGFILE MEMBER   '+RECO' TO GROUP 1;

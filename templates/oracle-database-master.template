@@ -1,6 +1,6 @@
 {
     "AWSTemplateFormatVersion": "2010-09-09",
-    "Description": "This template creates a VPC infrastructure for a multi-AZ deployment of enterprise class Oracle Database and Grid Infrastructure 12c. It will deploy database instances into the private subnets in separate Availability Zones. ***NOTE*** You must have Oracle Enterprise licensing to use Oracle Data Guard. See the deployment guide at http://aws.amazon.com/quickstart for details. This template creates Amazon EC2 instances and related resources. You will be billed for the AWS resources used if you create a stack from this template. The following Oracle downloads must be available in your bucket at the time of deployment: linuxamd64_12102_database_1of2.zip, linuxamd64_12102_database_2of2.zip, linuxamd64_12102_grid_1of2.zip, linuxamd64_12102_grid_2of2.zip, oracleasm-support-2.1.8-1.el6.x86_64.rpm, and oracleasmlib-2.0.4-1.el6.x86_64.rpm. If you would like to install Oracle Secure Backup Cloud Module for S3, you'll also need to provide this file in you S3 bucket: osbws.zip.",
+    "Description": "This template creates a VPC with multi-AZ deployment of enterprise class Oracle Database and Grid Infrastructure 12c. It will deploy database instances into the private subnets in separate Availability Zones. ***NOTE*** You must have Oracle Enterprise licensing to use Oracle Data Guard. See the deployment guide at http://aws.amazon.com/quickstart for details. This template creates Amazon EC2 instances and related resources. You will be billed for the AWS resources used if you create a stack from this template. Files needed: linuxamd64_12102_database_1of2.zip, linuxamd64_12102_database_2of2.zip, linuxamd64_12102_grid_1of2.zip and linuxamd64_12102_grid_2of2.zip for Oracle 12.1.0.2 Version, and linuxx64_12201_database.zip and linuxx64_12201_grid_home.zip for Oracle 12.2.0.1 Version, oracleasm-support-2.1.8-1.el6.x86_64.rpm and oracleasmlib-2.0.4-1.el6.x86_64.rpm for Oracle Linux 6.7 or RHEL 7.2, and oracleasmlib-2.0.12-1.el7.x86_64.rpm for Oracle Linux 7.3. OracleSecureBackup needs: osbws_installer.zip.",
     "Metadata": {
         "AWS::CloudFormation::Interface": {
             "ParameterGroups": [
@@ -38,6 +38,7 @@
                         "default": "Oracle Database Configuration"
                     },
                     "Parameters": [
+                        "OracleVersion",
                         "DomainName",
                         "DatabasePort",
                         "DatabaseName",
@@ -88,7 +89,10 @@
                 }
             ],
             "ParameterLabels": {
-                "AsmPass": {
+               "OracleVersion": {
+                 "default": "Oracle Version"
+               },
+               "AsmPass": {
                     "default": "ASM Password"
                 },
                 "AvailabilityZones": {
@@ -213,7 +217,7 @@
     },
     "Parameters": {
         "AsmPass": {
-            "AllowedPattern": "([A-Za-z0-9_!@#$%^&*-]{3,30})",
+            "AllowedPattern": "([A-Za-z0-9_#$]{3,30})",
             "ConstraintDescription": "Input your ASM Password, Min 3, Maximum of 30 characters.",
             "Description": "Enter your ASM Password, Min 3, maximum of 30 characters. This password is used for the SYSASM, ASM Monitor, and ASM EM admin users of Oracle ASM.",
             "NoEcho": "true",
@@ -239,15 +243,21 @@
                 "m4.4xlarge"
             ],
             "Default": "t2.micro",
-            "Description": "Amazon EC2 instance type for the bastion instance",
+            "Description": "Amazon EC2 instance type for the second bastion instance",
+            "Type": "String"
+        },
+        "Bastion2PrivateIP": {
+            "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$",
+            "ConstraintDescription": "IP address parameter must be in the form x.x.x.x",
+            "Default": "10.0.144.5",
+            "Description": "Fixed private IP for the second bastion located in Availability Zone 2","Description": "Amazon EC2 instance type for the bastion instance",
             "Type": "String"
         },
         "BastionAMIOS": {
             "AllowedValues": [
-                "Amazon-Linux-HVM",
-                "CentOS-7-HVM",
-                "Ubuntu-Server-14.04-LTS-HVM",
-                "Ubuntu-Server-16.04-LTS-HVM"
+              "AmazonLinuxHVM",
+                "CentOS7HVM",
+                "UbuntuServer1404LTSHVM"
             ],
             "Default": "Amazon-Linux-HVM",
             "Description": "The Linux distribution for the AMI to be used for the bastion instances",
@@ -256,6 +266,16 @@
         "BastionBanner": {
             "Default": "https://s3.amazonaws.com/quickstart-reference/oracle/database/latest/submodules/quickstart-linux-bastion/scripts/banner_message.txt",
             "Description": "Banner text to display upon login",
+            "Type": "String"
+        },
+        "OracleVersion": {
+            "AllowedValues": [
+                "12.1.0.2",
+                "12.2.0.1"
+            ],
+            "ConstraintDescription": "Default is 12.1.0.2.",
+            "Default": "12.1.0.2",
+            "Description": "Version of Oracle Database Software.",
             "Type": "String"
         },
         "CharacterSet": {
@@ -335,7 +355,7 @@
             "Type": "String"
         },
         "DatabasePass": {
-            "AllowedPattern": "([A-Za-z0-9_!@#$%^&*-]{3,30})",
+            "AllowedPattern": "([A-Za-z0-9_#$]{3,30})",
             "ConstraintDescription": "Input your database Password, Min 3, Maximum of 30 characters.",
             "Description": "Enter your Database Password, Min 3, maximum of 30 characters. This password is used for the SYS, SYSTEM, and DBSNMP users of Oracle Database.",
             "NoEcho": "true",
@@ -422,8 +442,9 @@
         },
         "OracleAMIOS": {
             "AllowedValues": [
-                "Red-Hat-Enterprise-Linux-7.2-HVM",
-                "Oracle-Linux-6.7-HVM"
+                "RedHatEnterpriseLinux72HVM",
+                "OracleLinux67HVM",
+                "OracleLinux73HVM"
             ],
             "Default": "Red-Hat-Enterprise-Linux-7.2-HVM",
             "Description": "Operating system and version for master/worker nodes.",
@@ -431,22 +452,31 @@
         },
         "OracleInstanceType": {
             "AllowedValues": [
-                "t2.medium",
-                "t2.large",
-                "m3.medium",
-                "m3.large",
-                "m3.xlarge",
-                "m3.2xlarge",
-                "m4.large",
-                "m4.xlarge",
-                "m4.2xlarge",
-                "m4.4xlarge",
-                "m4.10xlarge",
-                "r3.large",
-                "r3.xlarge",
-                "r3.2xlarge",
-                "r3.4xlarge",
-                "r3.8xlarge"
+              "t2.medium",
+              "t2.large",
+              "m3.medium",
+              "m3.large",
+              "m3.xlarge",
+              "m3.2xlarge",
+              "m4.large",
+              "m4.xlarge",
+              "m4.2xlarge",
+              "m4.4xlarge",
+              "m4.10xlarge",
+              "m4.16xlarge",
+              "r3.large",
+              "r3.xlarge",
+              "r3.2xlarge",
+              "r3.4xlarge",
+              "r3.8xlarge",
+              "r4.large",
+              "r4.xlarge",
+              "r4.2xlarge",
+              "r4.4xlarge",
+              "r4.8xlarge",
+              "r4.16xlarge",
+              "x1.16xlarge",
+              "x1.32xlarge"
             ],
             "ConstraintDescription": "Must be a valid EC2 instance type.",
             "Default": "r3.2xlarge",
@@ -692,8 +722,17 @@
                     ]
                 },
                 "Parameters": {
-                    "BastionInstanceType": {
-                        "Ref": "BastionInstanceType"
+                  "Bastion1InstanceType": {
+                        "Ref": "Bastion1InstanceType"
+                    },
+                    "Bastion1PrivateIP": {
+                        "Ref": "Bastion1PrivateIP"
+                    },
+                    "Bastion2InstanceType": {
+                        "Ref": "Bastion2InstanceType"
+                    },
+                    "Bastion2PrivateIP": {
+                        "Ref": "Bastion2PrivateIP"
                     },
                     "BastionAMIOS": {
                         "Ref": "BastionAMIOS"
@@ -773,6 +812,9 @@
                     ]
                 },
                 "Parameters": {
+                    "OracleVersion": {
+                      "Ref": "OracleVersion"
+                    },
                     "AsmPass": {
                         "Ref": "AsmPass"
                     },
