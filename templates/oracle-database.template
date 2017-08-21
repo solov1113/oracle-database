@@ -397,10 +397,10 @@
             "Type": "String"
         },
         "QSS3KeyPrefix": {
-            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Default": "oracle/database/latest",
-            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "AllowedPattern": "^[0-9a-zA-Z-/]*$",
+            "ConstraintDescription": "Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
+            "Default": "oracle/database/latest/",
+            "Description": "S3 key prefix for the Quick Start assets. Quick Start key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/).",
             "Type": "String"
         },
         "DataIOPS": {
@@ -821,6 +821,14 @@
                     ]
                 }
             ]
+        },
+        "GovCloudCondition": {
+            "Fn::Equals": [
+                {
+                    "Ref": "AWS::Region"
+                },
+                "us-gov-west-1"
+            ]
         }
     },
     "Resources": {
@@ -886,99 +894,84 @@
         "InstanceRoleOrcl": {
             "Type": "AWS::IAM::Role",
             "Properties": {
+                "Policies": [
+                    {
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                                {
+                                    "Action": [
+                                        "s3:GetObject"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": [
+                                            "arn:${Partition}:s3:::${QSS3BucketName}/${QSS3KeyPrefix}*",
+                                            {
+                                                "Partition": {
+                                                    "Fn::If": [
+                                                        "GovCloudCondition",
+                                                        "aws-us-gov",
+                                                        "aws"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "Effect": "Allow"
+                                },
+                                {
+                                    "Action": [
+                                        "s3:GetObject"
+                                    ],
+                                    "Resource": {
+                                        "Fn::Sub": [
+                                            "arn:${Partition}:s3:::${InstallBucketName}/*",
+                                            {
+                                                "Partition": {
+                                                    "Fn::If": [
+                                                        "GovCloudCondition",
+                                                        "aws-us-gov",
+                                                        "aws"
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "Effect": "Allow"
+                                }
+                            ]
+                        },
+                        "PolicyName": "aws-quick-start-s3-policy"
+                    }
+                ],
+                "Path": "/",
                 "AssumeRolePolicyDocument": {
                     "Statement": [
                         {
-                            "Effect": "Allow",
+                            "Action": [
+                                "sts:AssumeRole"
+                            ],
                             "Principal": {
                                 "Service": [
                                     "ec2.amazonaws.com"
                                 ]
                             },
-                            "Action": [
-                                "sts:AssumeRole"
-                            ]
+                            "Effect": "Allow"
                         }
-                    ]
-                },
-                "Path": "/"
-            }
-        },
-        "RolePoliciesOrcl": {
-            "Type": "AWS::IAM::Policy",
-            "Properties": {
-                "PolicyName": "S3Download",
-                "PolicyDocument": {
-                    "Statement": [
-                        {
-                            "Action": [
-                                "s3:GetObject"
-                            ],
-                            "Effect": "Allow",
-                            "Resource": [
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "arn:",
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "Partition"
-                                                ]
-                                            },
-                                            ":s3:::",
-                                            {
-                                                "Ref": "InstallBucketName"
-                                            },
-                                            "/*"
-                                        ]
-                                    ]
-                                },
-                                {
-                                    "Fn::Join": [
-                                        "",
-                                        [
-                                            "arn:",
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "Partition"
-                                                ]
-                                            },
-                                            ":s3:::",
-                                            {
-                                                "Ref": "InstallBucketName"
-                                            }
-                                        ]
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "Roles": [
-                    {
-                        "Ref": "InstanceRoleOrcl"
-                    }
-                ]
+                    ],
+                    "Version": "2012-10-17"
+                }
             }
         },
         "InstanceProfileOrcl": {
             "Type": "AWS::IAM::InstanceProfile",
             "Properties": {
-                "Path": "/",
                 "Roles": [
                     {
                         "Ref": "InstanceRoleOrcl"
                     }
-                ]
+                ],
+                "Path": "/"
             }
         },
         "OracleServerAccessSecurityGroup": {
@@ -1111,6 +1104,23 @@
         "PrimaryInstance": {
             "Type": "AWS::EC2::Instance",
             "Metadata": {
+                "AWS::CloudFormation::Authentication": {
+                    "S3AccessCreds": {
+                        "type": "S3",
+                        "buckets": [
+                            {
+                                "Ref": "InstallBucketName"
+                            },
+                            {
+                                "Ref": "QSS3BucketName"
+                            }
+                        ],
+                        "roleName": 
+                            {
+                                "Ref": "InstanceRoleOrcl"
+                            }                      
+                    }
+                },
                 "AWS::CloudFormation::Init": {
                     "config": {
                         "files": {
@@ -1273,384 +1283,265 @@
                             },
                             "/tmp/rmanbackup.cmd": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rmanbackup.cmd",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/rmanbackup.cmd"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/osb.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/osb.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/osb.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/listener_prim.ora": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/listener_prim.ora",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/listener_prim.ora"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000666",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/dbsetup.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbsetup.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/dbsetup.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/oracleexec.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/oracleexec.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/oracleexec.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/tns_stdb.ora": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/tns_stdb.ora",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/tns_stdb.ora"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000666",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-post.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-post.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-post.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-config.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-config.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-config122.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config122.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-config122.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/asm-config.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/asm-config.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/asm-config.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/grid-setup.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/grid-setup.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/grid-setup122.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup122.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/grid-setup122.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/bootstrap.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/bootstrap.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/bootstrap.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             }
                         }
-                    }
-                },
-                "AWS::CloudFormation::Authentication": {
-                    "S3AccessCreds": {
-                        "type": "S3",
-                        "buckets": [
-                            {
-                                "Ref": "InstallBucketName"
-                            }
-                        ],
-                        "roleName": [
-                            {
-                                "Ref": "InstanceRoleOrcl"
-                            }
-                        ]
                     }
                 }
             },
@@ -1931,7 +1822,7 @@
                         "Fn::Join": [
                             "",
                             [
-                                "#!/bin/bash \n",
+                                "#!/bin/bash -e\n",
                                 "cd /etc/yum.repos.d \n",
                                 "",
                                 {
@@ -1945,16 +1836,25 @@
                                 },
                                 " \n",
                                 "cd /tmp \n",
+                                "export PATH=$PATH:/usr/local/bin\n",
                                 "curl -O https://bootstrap.pypa.io/get-pip.py\n",
                                 "python get-pip.py\n",
-                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
                                 "pip install awscli\n",
-                                "curl -O https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
-                                "gunzip aws-cfn-bootstrap-latest.tar.gz\n",
-                                "tar -xvf aws-cfn-bootstrap-latest.tar\n",
-                                "cd aws-cfn-bootstrap*\n",
-                                "python setup.py build\n",
-                                "python setup.py install\n",
+                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
+                                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
+                                "cd /etc/yum.repos.d \n",
+                                "",
+                                {
+                                    "Fn::FindInMap": [
+                                        "OracleAMINameMap",
+                                        {
+                                            "Ref": "OracleAMIOS"
+                                        },
+                                        "repo"
+                                    ]
+                                },
+                                " \n",
+                                "cd /tmp \n",
                                 "yum install -y zip\n",
                                 "yum install -y unzip\n",
                                 "/usr/bin/cfn-init -v ",
@@ -2202,563 +2102,403 @@
                             },
                             "/tmp/rmanbackup.cmd": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rmanbackup-sb.cmd",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/rmanbackup-sb.cmd"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/osb.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/osb.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/osb.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/dbcheck.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbcheck.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/dbcheck.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/dbbroker.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbbroker.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/dbbroker.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/dbsetup.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbsetup.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/dbsetup-sb.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/start.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/start.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/start.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/start2.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/start2.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/start2.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/stop.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/stop.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/stop.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/post-duplicate.sql": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/post-duplicate.sql",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/post-duplicate.sql"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/rman.cmd": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rman.cmd",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/rman.cmd"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/rman2.cmd": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rman2.cmd",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/rman2.cmd"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000777",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/oracleexec.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/oracleexec.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/oracleexec-sb.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/listener_stdb.ora": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/listener_stdb.ora",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/listener_stdb.ora"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000666",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-post.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-post.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-post.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-config.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-config-sb.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/db-config122.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config122.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/db-config-sb122.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/asm-config.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/asm-config.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/asm-config.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/grid-setup.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/grid-setup.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/grid-setup122.rsp": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup122.rsp",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/grid-setup122.rsp"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000644",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             },
                             "/tmp/bootstrap.sh": {
                                 "source": {
-                                    "Fn::Join": [
-                                        "/",
-                                        [
-                                            {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
-                                                    {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                    "Fn::Sub": [
+                                        "https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/bootstrap.sh",
+                                        {
+                                            "QSS3Region": {
+                                                "Fn::If": [
+                                                    "GovCloudCondition",
+                                                    "s3-us-gov-west-1",
+                                                    "s3"
                                                 ]
-                                            },
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "scripts/bootstrap.sh"
-                                        ]
+                                            }
+                                        }
                                     ]
                                 },
                                 "mode": "000550",
                                 "owner": "root",
-                                "group": "root"
+                                "group": "root",
+                                "authentication": "S3AccessCreds"
                             }
                         }
                     }
@@ -2769,13 +2509,15 @@
                         "buckets": [
                             {
                                 "Ref": "InstallBucketName"
+                            },
+                            {
+                                "Ref": "QSS3BucketName"
                             }
                         ],
-                        "roleName": [
+                        "roleName": 
                             {
                                 "Ref": "InstanceRoleOrcl"
                             }
-                        ]
                     }
                 }
             },
