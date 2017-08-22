@@ -1822,7 +1822,7 @@
                         "Fn::Join": [
                             "",
                             [
-                                "#!/bin/bash -e\n",
+                                "#!/bin/bash \n",
                                 "cd /etc/yum.repos.d \n",
                                 "",
                                 {
@@ -1843,18 +1843,6 @@
                                 "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "cd /etc/yum.repos.d \n",
-                                "",
-                                {
-                                    "Fn::FindInMap": [
-                                        "OracleAMINameMap",
-                                        {
-                                            "Ref": "OracleAMIOS"
-                                        },
-                                        "repo"
-                                    ]
-                                },
-                                " \n",
-                                "cd /tmp \n",
                                 "yum install -y zip\n",
                                 "yum install -y unzip\n",
                                 "/usr/bin/cfn-init -v ",
@@ -2808,8 +2796,8 @@
                                 "export PATH=$PATH:/usr/local/bin\n",
                                 "curl -O https://bootstrap.pypa.io/get-pip.py\n",
                                 "python get-pip.py\n",
-                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
                                 "pip install awscli\n",
+                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
                                 "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "yum install -y zip\n",
                                 "yum install -y unzip\n",
