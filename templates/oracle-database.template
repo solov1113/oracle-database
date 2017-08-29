@@ -1883,7 +1883,7 @@
             },
             "CreationPolicy": {
                 "ResourceSignal": {
-                    "Timeout": "PT90M"
+                    "Timeout": "PT120M"
                 }
             }
         },
@@ -2899,7 +2899,7 @@
             },
             "CreationPolicy": {
                 "ResourceSignal": {
-                    "Timeout": "PT90M"
+                    "Timeout": "PT120M"
                 }
             }
         },
