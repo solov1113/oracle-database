@@ -470,9 +470,6 @@ echo 'export TMP=/tmp' >>/home/oracle/.bash_profile
 echo 'export TMPDIR=/tmp' >>/home/oracle/.bash_profile
 echo 'export ORACLE_BASE=/u01/app/oracle' >>/home/oracle/.bash_profile
 echo 'export ORACLE_HOME=/u01/app/oracle/product/12c/db_1' >>/home/oracle/.bash_profile
-host_name=`hostname`
-ip_address=`curl http://169.254.169.254/latest/meta-data/local-ipv4` 
-echo "$ip_address $host_name " >> /etc/hosts
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
     echo export ORACLE_SID=${PRIMARY_NAME} >>/home/oracle/.bash_profile
 elif [[ ${HOST_TYPE} == 'STANDBY' ]]; then
@@ -500,7 +497,8 @@ echo QS_BEGIN_oracleexec.sh
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
     sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2} ${3}' -- ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${ORACLE_VERSION} &> /tmp/oracleexec.log
 elif [[ ${HOST_TYPE} == 'STANDBY' ]]; then
-    sudo su -l oracle -c '/tmp/oracleexec.sh ${0} ${1} ${2} ${3} ${4} ${5}' -- ${DATABASE_PASS} ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${STANDBY_NAME} ${ORACLE_VERSION} &> /tmp/oracleexec.log
+    chown oracle /tmp/oracleexec-sb.*
+    sudo su -l oracle -c '/tmp/oracleexec-sb.sh ${0} ${1} ${2} ${3} ${4} ${5}' -- ${DATABASE_PASS} ${ASM_PASS} ${DATABASE_PORT} ${PRIMARY_NAME} ${STANDBY_NAME} ${ORACLE_VERSION} &> /tmp/oracleexec-sb.log
 fi
 echo QS_END_oracleexec.sh
 # Check ASM instance Status
@@ -562,6 +560,6 @@ echo "QS_END_OF_SETUP_SH"
 # END SETUP script
 
 # Remove files used in bootstrapping
-rm ${PARAMS_FILE}
+   rm ${PARAMS_FILE}
 
 echo "Finished AWS Quick Start Bootstrapping"

@@ -5,12 +5,12 @@ DATABASE_PORT=${3} #DATABASE_PORT
 PRIMARY_NAME=${4} #PRIMARY_NAME
 STANDBY_NAME=${5} #STANDBY_NAME
 ORACLE_VERSION=${6} #ORACLE_VERSION
-
-Installs Oracle Grid infrastructure using grid-setup.rsp parameter file, to /u01/app/oracle/product/12c/grid home
+source ~/.bash_profile
+#Installs Oracle Grid infrastructure using grid-setup.rsp parameter file, to /u01/app/oracle/product/12c/grid home
 if [[ ${ORACLE_VERSION} == '12.1.0.2' ]]; then
   /u01/install/grid/runInstaller -silent -ignorePrereq -responsefile /u01/install/grid-setup.rsp &>> /tmp/oracleexec.log
   # Wait until the installer asks for root.sh running scripts as this is asynchronous from shell execution
-  timeout 900 grep -q '1. /u01/app/oraInventory/orainstRoot.sh' <(tail -f /tmp/oracleexec.log)
+  timeout 1800 grep -q '1. /u01/app/oraInventory/orainstRoot.sh' <(tail -f /tmp/oracleexec.log)
   echo QS_runInstaller_end &>> /tmp/oracleexec.log
 fi
 if [[ ${ORACLE_VERSION} == '12.2.0.1' ]]; then
@@ -59,12 +59,13 @@ else
 fi
 # Install Oracle Database Software using the db-config.rsp parameter file
 if [[ ${ORACLE_VERSION} == '12.1.0.2' ]]; then
-   /u01/install/database/runInstaller -silent -ignorePrereq -responsefile /u01/install/db-config.rsp &>> /tmp/oracleexec.log
+   touch /tmp/dbrunInstaller.log
+   /u01/install/database/runInstaller -silent -ignorePrereq -responsefile /u01/install/db-config-sb.rsp &>> /tmp/dbrunInstaller.log
    # Wait until the installer asks for root.sh running scripts as this is asynchronous from shell execution
-   timeout 900 grep -q '1. /u01/app/oracle/product/12c/db_1/root.sh' <(tail -f /tmp/oracleexec.log)
+   while ! grep '/u01/app/oracle/product/12c/db_1/root.sh' /tmp/dbrunInstaller.log  ; do      sleep 5s;   done
 fi
 if [[ ${ORACLE_VERSION} == '12.2.0.1' ]]; then
-  /u01/install/database/runInstaller -silent -ignorePrereq -responsefile /u01/install/db-config122.rsp &>> /tmp/dbrunInstaller.log
+  /u01/install/database/runInstaller -silent -ignorePrereq -responsefile /u01/install/db-config-sb122.rsp &>> /tmp/dbrunInstaller.log
   # Wait until the installer asks for root.sh running scripts as this is asynchronous from shell execution
   while ! grep '/u01/app/oracle/product/12c/db_1/root.sh' /tmp/dbrunInstaller.log  ; do      sleep 5s;   done
 fi
@@ -151,4 +152,4 @@ echo -e "connect sys/${DATABASE_PASS}@${PRIMARY_NAME}\nenable configuration;\nex
 # Connect to SQLPLUS on primary instance to generate archivelogs
 sqlplus /nolog @/tmp/dbcheck.sql
 # dbsetup-sb.sql - use SQLPLUS to check if the archivelogs are being applied to Standby Instance
-sqlplus /nolog @/tmp/dbsetup.sql
+sqlplus /nolog @/tmp/dbsetup-sb.sql

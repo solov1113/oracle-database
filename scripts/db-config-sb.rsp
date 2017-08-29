@@ -1,5 +1,5 @@
 oracle.install.responseFileVersion=/oracle/install/rspfmt_dbinstall_response_schema_v12.1.0
-oracle.install.option=INSTALL_DB_SWONLY
+oracle.install.option=INSTALL_DB_AND_CONFIG
 ORACLE_HOSTNAME=MyHostName
 UNIX_GROUP_NAME=oinstall
 INVENTORY_LOCATION=/u01/app/oraInventory
