@@ -74,10 +74,10 @@
                 }
             ],
             "ParameterLabels": {
-               "OracleVersion": {
-                  "default": "Oracle Version"
-               },
-               "AsmPass": {
+                "OracleVersion": {
+                    "default": "Oracle Version"
+                },
+                "AsmPass": {
                     "default": "ASM Password"
                 },
                 "BastionSecurityGroupID": {
@@ -302,7 +302,6 @@
         "OracleAMIOS": {
             "AllowedValues": [
                 "Red-Hat-Enterprise-Linux-7.2-HVM",
-                "Oracle-Linux-6.7-HVM",
                 "Oracle-Linux-7.3-HVM"
             ],
             "Default": "Red-Hat-Enterprise-Linux-7.2-HVM",
@@ -562,100 +561,90 @@
                 "shmall": "51170509",
                 "shmmax": "196494753792"
             },
-           "m4.16xlarge" : {
-                  "shmmax" : "206158430208"  ,
-                  "sga" : "196608",
-                  "shmall" : "53687092"
-                  } ,
-                  "r4.large": {
-                      "sga": "9370",
-                      "shmall": "3198157",
-                      "shmmax": "12280922112"
-                  },
-                  "r4.xlarge": {
-                      "sga": "18739",
-                      "shmall": "6396314",
-                      "shmmax": "24561844224"
-                  },
-                  "r4.2xlarge": {
-                      "sga": "37478",
-                      "shmall": "12792628",
-                      "shmmax": "49123688448"
-                  },
-                  "r4.4xlarge": {
-                      "sga": "74957",
-                      "shmall": "25585255",
-                      "shmmax": "98247376896"
-                  },
-                  "r4.8xlarge": {
-                      "sga": "149914",
-                      "shmall": "51170509",
-                      "shmmax": "196494753792"
-                  },
-           "r4.16xlarge" : {
-                  "shmmax" : "392989507584"  ,
-                  "sga" : "374784",
-                  "shmall" : "102341018"
-                  } ,
-           "x1.16xlarge" : {
-             "shmmax" : "785979015168"  ,
-             "sga" : "749568",
-             "shmall" : "204682036"
-             } ,
-           "x1.32xlarge" : {
-             "shmmax" : "1571958030336"  ,
-             "sga" : "1499136",
-             "shmall" : "409364071"
-             }
+            "m4.16xlarge": {
+                "shmmax": "206158430208",
+                "sga": "196608",
+                "shmall": "53687092"
+            },
+            "r4.large": {
+                "sga": "9370",
+                "shmall": "3198157",
+                "shmmax": "12280922112"
+            },
+            "r4.xlarge": {
+                "sga": "18739",
+                "shmall": "6396314",
+                "shmmax": "24561844224"
+            },
+            "r4.2xlarge": {
+                "sga": "37478",
+                "shmall": "12792628",
+                "shmmax": "49123688448"
+            },
+            "r4.4xlarge": {
+                "sga": "74957",
+                "shmall": "25585255",
+                "shmmax": "98247376896"
+            },
+            "r4.8xlarge": {
+                "sga": "149914",
+                "shmall": "51170509",
+                "shmmax": "196494753792"
+            },
+            "r4.16xlarge": {
+                "shmmax": "392989507584",
+                "sga": "374784",
+                "shmall": "102341018"
+            },
+            "x1.16xlarge": {
+                "shmmax": "785979015168",
+                "sga": "749568",
+                "shmall": "204682036"
+            },
+            "x1.32xlarge": {
+                "shmmax": "1571958030336",
+                "sga": "1499136",
+                "shmall": "409364071"
+            }
         },
         "AWSAMIRegionMap": {
             "AMI": {
                 "OL73HVM": "Oracle Linux 7.3 x86_64 HVM OL7.3-x86_64-HVM-2016-11-09",
-                "OL67HVM": "Oracle Linux 6.7 x86_64 HVM Base v5-e91f91bf-500d-4da2-9495-a9f2f051f3cc-ami-4a706a20.3",
                 "RHEL72HVM": "RHEL-7.2_HVM-20161025-x86_64-1-Hourly2-GP2"
             },
             "ap-northeast-1": {
                 "OL73HVM": "ami-de248ebf",
-                "OL67HVM": "ami-39628658",
                 "RHEL72HVM": "ami-2265c543"
             },
             "ap-northeast-2": {
                 "OL73HVM": "ami-63b5620d",
-                "OL67HVM": "ami-40569e2e",
                 "RHEL72HVM": "ami-a9e532c7"
             },
             "ap-south-1": {
-                "OL67HVM": "ami-b2670ddd",
                 "RHEL72HVM": "ami-917205fe"
             },
             "ap-southeast-1": {
                 "OL73HVM": "ami-71f25012",
-                "OL67HVM": "ami-d48b5db7",
                 "RHEL72HVM": "ami-22953841"
             },
             "ap-southeast-2": {
                 "OL73HVM": "ami-70596713",
-                "OL67HVM": "ami-1fd1fd7c",
                 "RHEL72HVM": "ami-91cdf0f2"
             },
             "eu-central-1": {
                 "OL73HVM": "ami-5136f33e",
-                "OL67HVM": "ami-a6db36c9",
                 "RHEL72HVM": "ami-7def1712"
             },
             "eu-west-1": {
                 "OL73HVM": "ami-67164414",
-                "OL67HVM": "ami-b48a00c7",
                 "RHEL72HVM": "ami-b22961c1"
             },
             "sa-east-1": {
                 "OL73HVM": "ami-5edf4132",
-                "OL67HVM": "ami-c03db4ac",
                 "RHEL72HVM": "ami-28f66a44"
             },
             "us-east-1": {
                 "OL73HVM": "ami-7c4b7e6b",
-                "OL67HVM": "ami-0511fc68",
                 "RHEL72HVM": "ami-873e6190"
             },
             "us-east-2": {
@@ -663,77 +652,17 @@
             },
             "us-west-1": {
                 "OL73HVM": "ami-74f5a014",
-                "OL67HVM": "ami-9a92ebfa",
                 "RHEL72HVM": "ami-f88fc498"
             },
             "us-west-2": {
                 "OL73HVM": "ami-0d25886d",
-                "OL67HVM": "ami-09ea1769",
                 "RHEL72HVM": "ami-5dd3743d"
-            }
-        },
-        "AWSInfoRegionMap": {
-            "ap-northeast-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-northeast-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-south-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-southeast-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "ap-southeast-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "eu-central-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "eu-west-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "sa-east-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-east-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-east-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-gov-west-1": {
-                "Partition": "aws-us-gov",
-                "QuickStartS3URL": "https://s3-us-gov-west-1.amazonaws.com"
-            },
-            "us-west-1": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
-            },
-            "us-west-2": {
-                "Partition": "aws",
-                "QuickStartS3URL": "https://s3.amazonaws.com"
             }
         },
         "OracleAMINameMap": {
             "Red-Hat-Enterprise-Linux-7.2-HVM": {
                 "Code": "RHEL72HVM",
                 "repo": "#already come with repo"
-            },
-            "Oracle-Linux-6.7-HVM": {
-                "Code": "OL67HVM",
-                "repo": "curl -O http://public-yum.oracle.com/public-yum-ol6.repo"
             },
             "Oracle-Linux-7.3-HVM": {
                 "Code": "OL73HVM",
@@ -1115,10 +1044,9 @@
                                 "Ref": "QSS3BucketName"
                             }
                         ],
-                        "roleName": 
-                            {
-                                "Ref": "InstanceRoleOrcl"
-                            }                      
+                        "roleName": {
+                            "Ref": "InstanceRoleOrcl"
+                        }
                     }
                 },
                 "AWS::CloudFormation::Init": {
@@ -1129,32 +1057,20 @@
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "QuickStartS3URL|",
                                             {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
+                                                "Fn::Sub": [
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\n",
                                                     {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                                        "QuickStartS3URL": {
+                                                            "Fn::If": [
+                                                                "GovCloudCondition",
+                                                                "https://s3-us-gov-west-1.amazonaws.com",
+                                                                "https://s3.amazonaws.com"
+                                                            ]
+                                                        }
+                                                    }
                                                 ]
                                             },
-                                            "\n",
-                                            "QSS3BucketName|",
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            "\n",
-                                            "QSS3KeyPrefix|",
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "\n",
-                                            "InstallBucketName|",
-                                            {
-                                                "Ref": "InstallBucketName"
-                                            },
-                                            "\n",
                                             "Code|",
                                             {
                                                 "Fn::FindInMap": [
@@ -1197,81 +1113,6 @@
                                                     },
                                                     "shmmax"
                                                 ]
-                                            },
-                                            "\n",
-                                            "DatabasePass|",
-                                            {
-                                                "Ref": "DatabasePass"
-                                            },
-                                            "\n",
-                                            "AsmPass|",
-                                            {
-                                                "Ref": "AsmPass"
-                                            },
-                                            "\n",
-                                            "CharacterSet|",
-                                            {
-                                                "Ref": "CharacterSet"
-                                            },
-                                            "\n",
-                                            "DatabasePort|",
-                                            {
-                                                "Ref": "DatabasePort"
-                                            },
-                                            "\n",
-                                            "DatabaseName|",
-                                            {
-                                                "Ref": "DatabaseName"
-                                            },
-                                            "\n",
-                                            "StandbyName|",
-                                            {
-                                                "Ref": "StandbyName"
-                                            },
-                                            "\n",
-                                            "PrimaryIPAddress|",
-                                            {
-                                                "Ref": "PrimaryIPAddress"
-                                            },
-                                            "\n",
-                                            "StandbyIPAddress|",
-                                            {
-                                                "Ref": "StandbyIPAddress"
-                                            },
-                                            "\n",
-                                            "OSBInstall|",
-                                            {
-                                                "Ref": "OSBInstall"
-                                            },
-                                            "\n",
-                                            "OSBBName|",
-                                            {
-                                                "Ref": "OSBBucketName"
-                                            },
-                                            "\n",
-                                            "OSBKey|",
-                                            {
-                                                "Ref": "OSBKey"
-                                            },
-                                            "\n",
-                                            "OSBSecret|",
-                                            {
-                                                "Ref": "OSBSecret"
-                                            },
-                                            "\n",
-                                            "OSBOTN|",
-                                            {
-                                                "Ref": "OSBOTN"
-                                            },
-                                            "\n",
-                                            "OSBPass|",
-                                            {
-                                                "Ref": "OSBPass"
-                                            },
-                                            "\n",
-                                            "OracleVersion|",
-                                            {
-                                                "Ref": "OracleVersion"
                                             },
                                             "\n"
                                         ]
@@ -1936,32 +1777,20 @@
                                     "Fn::Join": [
                                         "",
                                         [
-                                            "QuickStartS3URL|",
                                             {
-                                                "Fn::FindInMap": [
-                                                    "AWSInfoRegionMap",
+                                                "Fn::Sub": [
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\n",
                                                     {
-                                                        "Ref": "AWS::Region"
-                                                    },
-                                                    "QuickStartS3URL"
+                                                        "QuickStartS3URL": {
+                                                            "Fn::If": [
+                                                                "GovCloudCondition",
+                                                                "https://s3-us-gov-west-1.amazonaws.com",
+                                                                "https://s3.amazonaws.com"
+                                                            ]
+                                                        }
+                                                    }
                                                 ]
                                             },
-                                            "\n",
-                                            "QSS3BucketName|",
-                                            {
-                                                "Ref": "QSS3BucketName"
-                                            },
-                                            "\n",
-                                            "QSS3KeyPrefix|",
-                                            {
-                                                "Ref": "QSS3KeyPrefix"
-                                            },
-                                            "\n",
-                                            "InstallBucketName|",
-                                            {
-                                                "Ref": "InstallBucketName"
-                                            },
-                                            "\n",
                                             "Code|",
                                             {
                                                 "Fn::FindInMap": [
@@ -2004,81 +1833,6 @@
                                                     },
                                                     "shmmax"
                                                 ]
-                                            },
-                                            "\n",
-                                            "DatabasePass|",
-                                            {
-                                                "Ref": "DatabasePass"
-                                            },
-                                            "\n",
-                                            "AsmPass|",
-                                            {
-                                                "Ref": "AsmPass"
-                                            },
-                                            "\n",
-                                            "CharacterSet|",
-                                            {
-                                                "Ref": "CharacterSet"
-                                            },
-                                            "\n",
-                                            "DatabasePort|",
-                                            {
-                                                "Ref": "DatabasePort"
-                                            },
-                                            "\n",
-                                            "DatabaseName|",
-                                            {
-                                                "Ref": "DatabaseName"
-                                            },
-                                            "\n",
-                                            "StandbyName|",
-                                            {
-                                                "Ref": "StandbyName"
-                                            },
-                                            "\n",
-                                            "PrimaryIPAddress|",
-                                            {
-                                                "Ref": "PrimaryIPAddress"
-                                            },
-                                            "\n",
-                                            "StandbyIPAddress|",
-                                            {
-                                                "Ref": "StandbyIPAddress"
-                                            },
-                                            "\n",
-                                            "OSBInstall|",
-                                            {
-                                                "Ref": "OSBInstall"
-                                            },
-                                            "\n",
-                                            "OSBBName|",
-                                            {
-                                                "Ref": "OSBBucketName"
-                                            },
-                                            "\n",
-                                            "OSBKey|",
-                                            {
-                                                "Ref": "OSBKey"
-                                            },
-                                            "\n",
-                                            "OSBSecret|",
-                                            {
-                                                "Ref": "OSBSecret"
-                                            },
-                                            "\n",
-                                            "OSBOTN|",
-                                            {
-                                                "Ref": "OSBOTN"
-                                            },
-                                            "\n",
-                                            "OSBPass|",
-                                            {
-                                                "Ref": "OSBPass"
-                                            },
-                                            "\n",
-                                            "OracleVersion|",
-                                            {
-                                                "Ref": "OracleVersion"
                                             },
                                             "\n"
                                         ]
@@ -2562,10 +2316,9 @@
                                 "Ref": "QSS3BucketName"
                             }
                         ],
-                        "roleName": 
-                            {
-                                "Ref": "InstanceRoleOrcl"
-                            }
+                        "roleName": {
+                            "Ref": "InstanceRoleOrcl"
+                        }
                     }
                 }
             },
