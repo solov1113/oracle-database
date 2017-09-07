@@ -116,6 +116,9 @@
                 "InstallBucketName": {
                     "default": "Binaries Bucket Name"
                 },
+                "KeyPairName": {
+                    "default": "Key Pair Name"
+                },
                 "OracleAMIOS": {
                     "default": "Database Operating System"
                 },
