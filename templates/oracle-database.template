@@ -480,6 +480,36 @@
                     "AssertDescription": "All subnets must in the VPC"
                 }
             ]
+        },
+        "OL73SupportedRegionsRule": {
+            "RuleCondition": {
+                "Fn::Equals": [
+                    {
+                        "Ref": "OracleAMIOS"
+                    },
+                    "Oracle-Linux-7.3-HVM"
+                ]
+            },
+            "Assertions": [
+                {
+                    "Assert": {
+                        "Fn::Not": [
+                            {
+                                "Fn::Contains": [
+                                    [
+                                        "ca-central-1",
+                                        "eu-west-2"
+                                    ],
+                                    {
+                                        "Ref": "AWS::Region"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "AssertDescription": "Oracle Linux 7.3 is not available in this region"
+                }
+            ]
         }
     },
     "Mappings": {
@@ -612,7 +642,7 @@
         },
         "AWSAMIRegionMap": {
             "AMI": {
-                "OL73HVM": "Oracle Linux 7.3 x86_64 HVM OL7.3-x86_64-HVM-2016-11-09",
+                "OL73HVM": "OL7.3-x86_64-HVM-2016-11-09",
                 "RHEL72HVM": "RHEL-7.2_HVM-20161025-x86_64-1-Hourly2-GP2"
             },
             "ap-northeast-1": {
@@ -634,6 +664,9 @@
                 "OL73HVM": "ami-70596713",
                 "RHEL72HVM": "ami-91cdf0f2"
             },
+            "ca-central-1": {
+                "RHEL72HVM": "ami-b764d6d3"
+            },
             "eu-central-1": {
                 "OL73HVM": "ami-5136f33e",
                 "RHEL72HVM": "ami-7def1712"
@@ -641,6 +674,9 @@
             "eu-west-1": {
                 "OL73HVM": "ami-67164414",
                 "RHEL72HVM": "ami-b22961c1"
+            },
+            "eu-west-2": {
+                "RHEL72HVM": "ami-b9353fdd"
             },
             "sa-east-1": {
                 "OL73HVM": "ami-5edf4132",

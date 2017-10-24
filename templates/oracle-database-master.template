@@ -571,6 +571,38 @@
             "Type": "String"
         }
     },
+    "Rules": {
+        "OL73SupportedRegionsRule": {
+            "RuleCondition": {
+                "Fn::Equals": [
+                    {
+                        "Ref": "OracleAMIOS"
+                    },
+                    "Oracle-Linux-7.3-HVM"
+                ]
+            },
+            "Assertions": [
+                {
+                    "Assert": {
+                        "Fn::Not": [
+                            {
+                                "Fn::Contains": [
+                                    [
+                                        "ca-central-1",
+                                        "eu-west-2"
+                                    ],
+                                    {
+                                        "Ref": "AWS::Region"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    "AssertDescription": "Oracle Linux 7.3 is not available in this region"
+                }
+            ]
+        }
+    },
     "Conditions": {
         "GovCloudCondition": {
             "Fn::Equals": [
