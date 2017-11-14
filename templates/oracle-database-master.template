@@ -268,7 +268,7 @@
                 "12.2.0.1"
             ],
             "ConstraintDescription": "Default is 12.1.0.2.",
-            "Default": "12.1.0.2",
+            "Default": "12.2.0.1",
             "Description": "Version of Oracle Database Software.",
             "Type": "String"
         },
@@ -588,8 +588,10 @@
                             {
                                 "Fn::Contains": [
                                     [
+                                        "ap-south-1",
                                         "ca-central-1",
-                                        "eu-west-2"
+                                        "eu-west-2",
+                                        "us-east-2"
                                     ],
                                     {
                                         "Ref": "AWS::Region"

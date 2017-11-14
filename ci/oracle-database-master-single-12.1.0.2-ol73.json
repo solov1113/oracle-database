@@ -72,6 +72,10 @@
         "ParameterValue": "t2.large"
     },
     {
+        "ParameterKey": "OracleVersion",
+        "ParameterValue": "12.1.0.2"
+    },
+    {
         "ParameterKey": "OSBBucketName",
         "ParameterValue": "NEED_VALUE"
     },

@@ -25,7 +25,7 @@
     },
     {
         "ParameterKey": "DataVolumeType",
-        "ParameterValue": "io1"
+        "ParameterValue": "gp2"
     },
     {
         "ParameterKey": "DatabaseName",
@@ -41,7 +41,7 @@
     },
     {
         "ParameterKey": "DataGuardConfig",
-        "ParameterValue": "Single"
+        "ParameterValue": "Data Guard"
     },
     {
         "ParameterKey": "DomainName",
@@ -70,6 +70,10 @@
     {
         "ParameterKey": "OracleInstanceType",
         "ParameterValue": "t2.large"
+    },
+    {
+        "ParameterKey": "OracleVersion",
+        "ParameterValue": "12.2.0.1"
     },
     {
         "ParameterKey": "OSBBucketName",
@@ -121,7 +125,7 @@
     },
     {
         "ParameterKey": "RecoVolumeType",
-        "ParameterValue": "io1"
+        "ParameterValue": "gp2"
     },
     {
         "ParameterKey": "RemoteAccessCIDR",
