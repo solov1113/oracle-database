@@ -24,7 +24,7 @@ tests:
     regions:
     - ap-northeast-1
     - ap-northeast-2
-    - ap-south-1
+    - us-east-1
     template_file: oracle-database-master.template
   master-defaults-rhel72:
     parameter_input: oracle-database-master-defaults-rhel72.json
@@ -37,7 +37,7 @@ tests:
     parameter_input: oracle-database-master-single-ol73.json
     regions:
     - us-east-1
-    - us-east-2
+    - ap-northeast-2
     - us-west-1
     - us-west-2
     template_file: oracle-database-master.template
