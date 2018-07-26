@@ -48,7 +48,8 @@
                         "EBSReco",
                         "RecoVolumeType",
                         "RecoIOPS",
-                        "InstallBucketName"
+                        "InstallBucketName",
+                        "InstallBucketPrefix"
                     ]
                 },
                 {
@@ -116,6 +117,9 @@
                 },
                 "InstallBucketName": {
                     "default": "Binaries Bucket Name"
+                },
+                "InstallBucketPrefix": {
+                    "default": "Binaries Bucket Key Prefix"
                 },
                 "KeyPairName": {
                     "default": "Key Pair Name"
@@ -296,10 +300,17 @@
             "MaxValue": "16000"
         },
         "InstallBucketName": {
-            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-            "ConstraintDescription": "Bucket name and key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Description": "Name of your S3 bucket with your Oracle Binaries (e.g., bucket-name/key/prefix)",
+            "AllowedPattern": "^[0-9a-zA-Z-]+([0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Bucket name can include numbers, lowercase letters, uppercase letters, hyphens (-).",
+            "Description": "Name of your S3 bucket with your Oracle Binaries (e.g., bucket-name)",
             "Type": "String"
+        },
+        "InstallBucketPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Description": "Name of your S3 prefix with your Oracle Binaries (e.g., key/prefix)",
+            "Type": "String",
+            "Default": "oracle/database/12"
         },
         "KeyPairName": {
             "ConstraintDescription": "must be the name of an existing EC2 KeyPair.",
@@ -916,7 +927,7 @@
                                     ],
                                     "Resource": {
                                         "Fn::Sub": [
-                                            "arn:${Partition}:s3:::${InstallBucketName}/*",
+                                            "arn:${Partition}:s3:::${InstallBucketName}/${InstallBucketPrefix}/*",
                                             {
                                                 "Partition": {
                                                     "Fn::If": [
@@ -1153,7 +1164,7 @@
                                         [
                                             {
                                                 "Fn::Sub": [
-                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}/${InstallBucketPrefix}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
                                                     {
                                                         "QuickStartS3URL": {
                                                             "Fn::If": [
@@ -1935,7 +1946,7 @@
                                         [
                                             {
                                                 "Fn::Sub": [
-                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}/${InstallBucketPrefix}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
                                                     {
                                                         "QuickStartS3URL": {
                                                             "Fn::If": [
