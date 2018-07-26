@@ -28,7 +28,8 @@
                         "OracleAMIOS",
                         "OracleInstanceType",
                         "PrimaryIPAddress",
-                        "StandbyIPAddress"
+                        "StandbyIPAddress",
+                        "EnableCWL"
                     ]
                 },
                 {
@@ -211,6 +212,9 @@
                 },
                 "VPCCIDR": {
                     "default": "VPC CIDR"
+                },
+                "EnableCWL": {
+                    "default": "Enable CloudWatch Logs"
                 }
             }
         }
@@ -569,6 +573,15 @@
             "Default": "10.0.0.0/16",
             "Description": "CIDR Block for the VPC",
             "Type": "String"
+        },
+        "EnableCWL": {
+            "AllowedValues": [
+                "true",
+                "false"
+            ],
+            "Default": "false",
+            "Description": "enable pushing instance logs to CloudWatch Logs",
+            "Type": "String"
         }
     },
     "Rules": {
@@ -865,6 +878,9 @@
                             "VPCStack",
                             "Outputs.VPCID"
                         ]
+                    },
+                    "EnableCWL": {
+                        "Ref": "EnableCWL"
                     }
                 }
             }

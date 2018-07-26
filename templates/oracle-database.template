@@ -24,7 +24,8 @@
                         "OracleAMIOS",
                         "OracleInstanceType",
                         "PrimaryIPAddress",
-                        "StandbyIPAddress"
+                        "StandbyIPAddress",
+                        "EnableCWL"
                     ]
                 },
                 {
@@ -172,6 +173,9 @@
                 },
                 "VPCID": {
                     "default": "VPC ID"
+                },
+                "EnableCWL": {
+                    "default": "Enable CloudWatch Logs"
                 }
             }
         }
@@ -458,6 +462,15 @@
         "VPCID": {
             "Description": "ID of the VPC (e.g., vpc-0343606e)",
             "Type": "AWS::EC2::VPC::Id"
+        },
+        "EnableCWL": {
+            "AllowedValues": [
+                "true",
+                "false"
+            ],
+            "Default": "false",
+            "Description": "enable pushing instance logs to CloudWatch Logs",
+            "Type": "String"
         }
     },
     "Rules": {
@@ -799,6 +812,14 @@
                 },
                 "us-gov-west-1"
             ]
+        },
+        "CWL": {
+            "Fn::Equals": [
+                {
+                    "Ref": "EnableCWL"
+                },
+                "true"
+            ]
         }
     },
     "Resources": {
@@ -912,7 +933,31 @@
                             ]
                         },
                         "PolicyName": "aws-quick-start-s3-policy"
-                    }
+                    },
+                    {"Fn::If": [
+                      "CWL",
+                      {
+                          "PolicyDocument": {
+                              "Version": "2012-10-17",
+                              "Statement": [
+                                  {
+                                      "Effect": "Allow",
+                                      "Action": [
+                                          "logs:CreateLogGroup",
+                                          "logs:CreateLogStream",
+                                          "logs:PutLogEvents",
+                                          "logs:DescribeLogStreams"
+                                      ],
+                                      "Resource": [
+                                          "arn:aws:logs:*:*:*"
+                                      ]
+                                  }
+                              ]
+                          },
+                          "PolicyName": "aws-quick-start-cloudwatchlogs-policy"
+                      },
+                      {"Ref": "AWS::NoValue"}
+                    ]}
                 ],
                 "Path": "/",
                 "AssumeRolePolicyDocument": {
@@ -1069,6 +1114,14 @@
                         }
                     }
                 ]
+            }
+        },
+        "LogGroup": {
+            "Condition": "CWL",
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "oracle-database",
+                "RetentionInDays": "7"
             }
         },
         "PrimaryInstance": {
@@ -1705,6 +1758,56 @@
                             "",
                             [
                                 "#!/bin/bash \n",
+                                "echo '[Cloning: Load QuickStart Common Utils]'\n",
+                                "yum install -y git\n",
+                                "until git clone --single-branch -b develop https://github.com/aws-quickstart/quickstart-linux-utilities.git ; do echo \"Retrying\";done\n",
+                                "cd quickstart-linux-utilities\n",
+                                "source quickstart-cfn-tools.source\n",
+                                "echo '[Loaded: Load QuickStart Common Utils]'\n",
+                                "echo '[Update Operating System]'\n",
+                                "qs_update-os || qs_error\n",
+                                "qs_bootstrap_pip || qs_error\n",
+                                "qs_aws-cfn-bootstrap || qs_error\n",
+                                {
+                                    "Fn::If": [
+                                        "CWL",
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    "# Set Log Group Name (TODO: create qs_cloudwatch_loggroup_set)\n",
+                                                    "sed -i \"s/__LOGGROUP__/\\/aws-quick-start\\/",
+                                                    {
+                                                        "Ref": "LogGroup"
+                                                    },
+                                                    "/g\" cloudwatch_logs.stub\n",
+                                                    "qs_cloudwatch_install || qs_error\n",
+                                                    "# CFN Debug Logs\n",
+                                                    "qs_cloudwatch_tracklog /var/log/messages\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cloud-init.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cloud-init-output.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-init.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-init-cmd.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-wire.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/bootstrap.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbexecConf.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbrunInstaller.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbsetup.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/download.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/oracleexec.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/osb.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/rmanbackup.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/status.log\n"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                },
+                                "cd /tmp \n",
+                                "export PATH=$PATH:/usr/local/bin\n",
                                 "cd /etc/yum.repos.d \n",
                                 "",
                                 {
@@ -1717,13 +1820,25 @@
                                     ]
                                 },
                                 " \n",
-                                "cd /tmp \n",
-                                "export PATH=$PATH:/usr/local/bin\n",
-                                "curl -O https://bootstrap.pypa.io/get-pip.py\n",
-                                "python get-pip.py\n",
+                                "S3URI=https://",
+                                {
+                                    "Ref": "QSS3BucketName"
+                                },
+                                ".",
+                                {
+                                    "Fn::If": [
+                                        "GovCloudCondition",
+                                        "s3-us-gov-west-1",
+                                        "s3"
+                                    ]
+                                },
+                                ".amazonaws.com/",
+                                {
+                                    "Ref": "QSS3KeyPrefix"
+                                },
+                                "\n",
+                                "NODE_CONF=${!S3URI}scripts/node.conf_stub\n",
                                 "pip install awscli\n",
-                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
-                                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "cd /etc/yum.repos.d \n",
                                 "yum install -y zip\n",
                                 "yum install -y unzip\n",
@@ -2634,6 +2749,54 @@
                             "",
                             [
                                 "#!/bin/bash \n",
+                                "echo '[Cloning: Load QuickStart Common Utils]'\n",
+                                "yum install -y git\n",
+                                "until git clone --single-branch -b develop https://github.com/aws-quickstart/quickstart-linux-utilities.git ; do echo \"Retring\";done\n",
+                                "cd quickstart-linux-utilities\n",
+                                "source quickstart-cfn-tools.source\n",
+                                "echo '[Loaded: Load QuickStart Common Utils]'\n",
+                                "echo '[Update Operating System]'\n",
+                                "qs_update-os || qs_error\n",
+                                "qs_bootstrap_pip || qs_error\n",
+                                "qs_aws-cfn-bootstrap || qs_error\n",
+                                {
+                                    "Fn::If": [
+                                        "CWL",
+                                        {
+                                            "Fn::Join": [
+                                                "",
+                                                [
+                                                    "# Set Log Group Name (TODO: create qs_cloudwatch_loggroup_set)\n",
+                                                    "sed -i \"s/__LOGGROUP__/\\/aws-quick-start\\/",
+                                                    {
+                                                        "Ref": "LogGroup"
+                                                    },
+                                                    "/g\" cloudwatch_logs.stub\n",
+                                                    "qs_cloudwatch_install || qs_error\n",
+                                                    "# CFN Debug Logs\n",
+                                                    "qs_cloudwatch_tracklog /var/log/messages\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cloud-init.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cloud-init-output.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-init.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-init-cmd.log\n",
+                                                    "qs_cloudwatch_tracklog /var/log/cfn-wire.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/bootstrap.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbexecConf.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbrunInstaller.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/dbsetup.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/download.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/oracleexec.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/osb.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/rmanbackup.log\n",
+                                                    "qs_cloudwatch_tracklog /tmp/status.log\n"
+                                                ]
+                                            ]
+                                        },
+                                        {
+                                            "Ref": "AWS::NoValue"
+                                        }
+                                    ]
+                                },
                                 "cd /etc/yum.repos.d \n",
                                 "",
                                 {
@@ -2646,13 +2809,26 @@
                                     ]
                                 },
                                 " \n",
+                                "S3URI=https://",
+                                {
+                                    "Ref": "QSS3BucketName"
+                                },
+                                ".",
+                                {
+                                    "Fn::If": [
+                                        "GovCloudCondition",
+                                        "s3-us-gov-west-1",
+                                        "s3"
+                                    ]
+                                },
+                                ".amazonaws.com/",
+                                {
+                                    "Ref": "QSS3KeyPrefix"
+                                },
+                                "\n",
+                                "NODE_CONF=${!S3URI}scripts/node.conf_stub\n",
                                 "cd /tmp \n",
                                 "export PATH=$PATH:/usr/local/bin\n",
-                                "curl -O https://bootstrap.pypa.io/get-pip.py\n",
-                                "python get-pip.py\n",
-                                "pip install awscli\n",
-                                "echo DEBUGPipInstalled &> /tmp/bootstrap.log\n",
-                                "easy_install https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz\n",
                                 "yum install -y zip\n",
                                 "yum install -y unzip\n",
                                 "/usr/bin/cfn-init -v ",
