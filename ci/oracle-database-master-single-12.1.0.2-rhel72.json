@@ -1,5 +1,9 @@
 [
     {
+        "ParameterKey": "EnableCWL",
+        "ParameterValue": "true"
+    },
+    {
         "ParameterKey": "AsmPass",
         "ParameterValue": "$[alfred_genpass_30]"
     },
@@ -77,7 +81,7 @@
     },
     {
         "ParameterKey": "OSBBucketName",
-        "ParameterValue": "NEED_VALUE"
+        "ParameterValue": "override"
     },
     {
         "ParameterKey": "OSBInstall",
@@ -85,19 +89,19 @@
     },
     {
         "ParameterKey": "OSBKey",
-        "ParameterValue": "AWS_Access_Key"
+        "ParameterValue": "override"
     },
     {
         "ParameterKey": "OSBOTN",
-        "ParameterValue": "testuser@oracle.com"
+        "ParameterValue": "override"
     },
     {
         "ParameterKey": "OSBPass",
-        "ParameterValue": "$[alfred_genpass_30]"
+        "ParameterValue": "override"
     },
     {
         "ParameterKey": "OSBSecret",
-        "ParameterValue": "AWS_Secret_Key"
+        "ParameterValue": "override"
     },
     {
         "ParameterKey": "PrimaryIPAddress",
