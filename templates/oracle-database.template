@@ -1100,7 +1100,7 @@
                                         [
                                             {
                                                 "Fn::Sub": [
-                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\n",
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
                                                     {
                                                         "QuickStartS3URL": {
                                                             "Fn::If": [
@@ -1820,7 +1820,7 @@
                                         [
                                             {
                                                 "Fn::Sub": [
-                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\n",
+                                                    "QuickStartS3URL|${QuickStartS3URL}\nQSS3BucketName|${QSS3BucketName}\nQSS3KeyPrefix|${QSS3KeyPrefix}\nInstallBucketName|${InstallBucketName}\nDatabasePass|${DatabasePass}\nAsmPass|${AsmPass}\nCharacterSet|${CharacterSet}\nDatabasePort|${DatabasePort}\nDatabaseName|${DatabaseName}\nStandbyName|${StandbyName}\nPrimaryIPAddress|${PrimaryIPAddress}\nStandbyIPAddress|${StandbyIPAddress}\nOSBInstall|${OSBInstall}\nOSBBName|${OSBBucketName}\nOSBKey|${OSBKey}\nOSBSecret|${OSBSecret}\nOSBOTN|${OSBOTN}\nOracleVersion|${OracleVersion}\nOSBPass|${OSBPass}\n",
                                                     {
                                                         "QuickStartS3URL": {
                                                             "Fn::If": [
