@@ -85,7 +85,7 @@
     },
     {
         "ParameterKey": "OSBInstall",
-        "ParameterValue": "true"
+        "ParameterValue": "false"
     },
     {
         "ParameterKey": "OSBKey",
