@@ -2838,6 +2838,7 @@
                                 },
                                 "\n",
                                 "NODE_CONF=${!S3URI}scripts/node.conf_stub\n",
+                                "pip install awscli\n",
                                 "cd /tmp \n",
                                 "export PATH=$PATH:/usr/local/bin\n",
                                 "yum install -y zip\n",
