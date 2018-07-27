@@ -62,6 +62,6 @@ tests:
   master-single-12201-rhel72:
     parameter_input: oracle-database-master-single-12.2.0.1-rhel72.json
     regions:
-    - sa-east-1
+    # - sa-east-1
     - us-east-2
     template_file: oracle-database-master.template
