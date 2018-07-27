@@ -490,7 +490,7 @@ chown oracle:dba /home/oracle/.ssh /home/oracle/.ssh/authorized_keys
 chmod 600 /home/oracle/.ssh/authorized_keys
 echo 'oracle ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 REQ_TTY=0
-if [ $(cat /etc/sudoers | grep '^Defaults' | grep -c '!requiretty') -gt 0 ] ; then
+if [ $(cat /etc/sudoers | grep '^Defaults' | grep -c '!requiretty') -eq 0 ] ; then
     sed -i 's/requiretty/!requiretty/g' /etc/sudoers
     REQ_TTY=1
 fi
