@@ -1131,8 +1131,7 @@
             "Condition": "CWL",
             "Type": "AWS::Logs::LogGroup",
             "Properties": {
-              "LogGroupName": "oracle-database",
-                "RetentionInDays": "7"
+              "RetentionInDays": "7"
             }
         },
         "PrimaryInstance": {
