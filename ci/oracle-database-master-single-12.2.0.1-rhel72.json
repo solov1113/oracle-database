@@ -61,7 +61,7 @@
     },
     {
         "ParameterKey": "InstallBucketName",
-        "ParameterValue": "$[alfred_getmediabucket]/oracle/database/12"
+        "ParameterValue": "$[alfred_getmediabucket]"
     },
     {
         "ParameterKey": "KeyPairName",
