@@ -3019,6 +3019,12 @@
                 "Ref": "KeyPairName"
             },
             "Description": "Key pair for the instances"
+        },
+        "OracleServerAccessSecurityGroup": {
+            "Value": {
+                "Ref": "OracleServerAccessSecurityGroup"
+            },
+            "Description": "Security group that gives access to Oracle databases"
         }
     }
 }
