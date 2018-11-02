@@ -896,6 +896,7 @@
         "InstanceRoleOrcl": {
             "Type": "AWS::IAM::Role",
             "Properties": {
+                "ManagedPolicyArns": ["arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"],
                 "Policies": [
                     {
                         "PolicyDocument": {
@@ -1768,6 +1769,10 @@
                             "",
                             [
                                 "#!/bin/bash \n",
+                                "echo '[Installing and Starting Systems Manager Agent]'\n",
+                                "yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_amd64/amazon-ssm-agent.rpm\n",
+                                "systemctl enable amazon-ssm-agent\n",
+                                "systemctl start amazon-ssm-agent\n",
                                 "echo '[Cloning: Load QuickStart Common Utils]'\n",
                                 "yum install -y git\n",
                                 "until git clone --single-branch -b develop https://github.com/aws-quickstart/quickstart-linux-utilities.git ; do echo \"Retrying\";done\n",
