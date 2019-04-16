@@ -489,7 +489,11 @@ cp /home/ec2-user/.ssh/authorized_keys /home/oracle/.ssh/.
 chown oracle:dba /home/oracle/.ssh /home/oracle/.ssh/authorized_keys
 chmod 600 /home/oracle/.ssh/authorized_keys
 echo 'oracle ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-sed -i 's/requiretty/!requiretty/g' /etc/sudoers
+REQ_TTY=0
+if [ $(cat /etc/sudoers | grep '^Defaults' | grep -c '!requiretty') -eq 0 ] ; then
+    sed -i 's/requiretty/!requiretty/g' /etc/sudoers
+    REQ_TTY=1
+fi
 # Prepare and execute oracleexec
 touch /tmp/oracleexec.log
 chown oracle:dba /tmp/oracleexec.*
@@ -543,7 +547,9 @@ echo QS_BEGIN_osb.sh
 sudo su -l oracle -c '/tmp/osb.sh ${0} ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8}' -- ${OSB_CHOICE} ${HOST_TYPE} ${PRIMARY_NAME} ${INSTALLER_S3_BUCKET} ${OSB_AWS_BUCKET} ${OSB_AWS_KEY} ${OSB_AWS_SECRET} ${OSB_OTN_USER} ${OSB_OTN_PASS} &> /tmp/osb.log
 echo QS_END_osb.sh
 # Change backup permissions of sudoers
-sed -i 's/!requiretty/requiretty/g' /etc/sudoers
+if [ ${REQ_TTY} -eq 1 ] ; then
+    sed -i 's/!requiretty/requiretty/g' /etc/sudoers
+fi
 # Copy files from PRIMARY instance to Shared Filesystem
 if [[ ${HOST_TYPE} == 'PRIMARY' ]]; then
     cp /tmp/stby.ctl /shared/.

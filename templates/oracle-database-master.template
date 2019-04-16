@@ -28,7 +28,8 @@
                         "OracleAMIOS",
                         "OracleInstanceType",
                         "PrimaryIPAddress",
-                        "StandbyIPAddress"
+                        "StandbyIPAddress",
+                        "EnableCWL"
                     ]
                 },
                 {
@@ -51,7 +52,8 @@
                         "EBSReco",
                         "RecoVolumeType",
                         "RecoIOPS",
-                        "InstallBucketName"
+                        "InstallBucketName",
+                        "InstallBucketPrefix"
                     ]
                 },
                 {
@@ -143,6 +145,9 @@
                 "InstallBucketName": {
                     "default": "Binaries Bucket Name"
                 },
+                "InstallBucketPrefix": {
+                    "default": "Binaries Bucket Key Prefix"
+                },
                 "KeyPairName": {
                     "default": "Key Pair Name"
                 },
@@ -211,6 +216,9 @@
                 },
                 "VPCCIDR": {
                     "default": "VPC CIDR"
+                },
+                "EnableCWL": {
+                    "default": "Enable CloudWatch Logs"
                 }
             }
         }
@@ -393,10 +401,17 @@
             "Type": "String"
         },
         "InstallBucketName": {
-            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
-            "ConstraintDescription": "Bucket name and key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
-            "Description": "Name of your S3 bucket with your Oracle Binaries (e.g., bucket-name/key/prefix)",
+            "AllowedPattern": "^[0-9a-zA-Z-]+([0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Bucket name can include numbers, lowercase letters, uppercase letters, hyphens (-).",
+            "Description": "Name of your S3 bucket with your Oracle Binaries (e.g., bucket-name)",
             "Type": "String"
+        },
+        "InstallBucketPrefix": {
+            "AllowedPattern": "^[0-9a-zA-Z-]+(/[0-9a-zA-Z-]+)*$",
+            "ConstraintDescription": "Key prefix can include numbers, lowercase letters, uppercase letters, hyphens (-), and forward slash (/). It cannot start or end with forward slash (/) because they are automatically appended.",
+            "Description": "Name of your S3 prefix with your Oracle Binaries (e.g., key/prefix)",
+            "Type": "String",
+            "Default": "oracle/database/12"
         },
         "KeyPairName": {
             "Description": "Public/private key pairs allow you to securely connect to your instance after it launches",
@@ -568,6 +583,15 @@
             "ConstraintDescription": "CIDR block parameter must be in the form x.x.x.x/16-28",
             "Default": "10.0.0.0/16",
             "Description": "CIDR Block for the VPC",
+            "Type": "String"
+        },
+        "EnableCWL": {
+            "AllowedValues": [
+                "true",
+                "false"
+            ],
+            "Default": "false",
+            "Description": "enable pushing instance logs to CloudWatch Logs",
             "Type": "String"
         }
     },
@@ -800,6 +824,9 @@
                     "InstallBucketName": {
                         "Ref": "InstallBucketName"
                     },
+                    "InstallBucketPrefix": {
+                        "Ref": "InstallBucketPrefix"
+                    },
                     "KeyPairName": {
                         "Ref": "KeyPairName"
                     },
@@ -865,6 +892,9 @@
                             "VPCStack",
                             "Outputs.VPCID"
                         ]
+                    },
+                    "EnableCWL": {
+                        "Ref": "EnableCWL"
                     }
                 }
             }
