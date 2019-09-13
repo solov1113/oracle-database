@@ -73,7 +73,7 @@
     },
     {
         "ParameterKey": "OracleInstanceType",
-        "ParameterValue": "t2.large"
+        "ParameterValue": "t3.large"
     },
     {
         "ParameterKey": "OracleVersion",
