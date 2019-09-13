@@ -4,7 +4,7 @@ global:
   qsname: quickstart-oracle-database
   regions:
     - ap-northeast-1
-    - ap-northeast-2
+#    - ap-northeast-2 instance is not supported
     - ap-south-1
     - ap-southeast-1
     - ap-southeast-2
@@ -32,7 +32,7 @@ tests:
   master-defaults-12201-ol73:
     parameter_input: oracle-database-master-dataguard-12.2.0.1-ol73.json
     regions:
-    - ap-northeast-2
+#    - ap-northeast-2
     - us-east-1
     template_file: oracle-database-master.template
   master-defaults-12201-rhel72:
