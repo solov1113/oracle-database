@@ -330,7 +330,6 @@
             "AllowedValues": [
                 "t2.medium",
                 "t2.large",
-                "t3.large",
                 "m3.medium",
                 "m3.large",
                 "m3.xlarge",
