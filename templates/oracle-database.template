@@ -823,8 +823,8 @@ Resources:
                       OSBPass|${OSBPass}
                     - QuickStartS3URL: !If
                         - GovCloudCondition
-                        - https://s3-us-gov-west-1.amazonaws.com
-                        - https://s3.amazonaws.com
+                          - 'https://s3-us-gov-west-1.amazonaws.com
+                          - 'https://s3.amazonaws.com
                   - Code|
                   - !FindInMap
                     - OracleAMINameMap
@@ -853,118 +853,131 @@ Resources:
               owner: root
               group: root
             /tmp/rmanbackup.cmd:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/rmanbackup.cmd
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/rmanbackup.cmd'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/osb.sh:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/osb.sh
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/osb.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/listener_prim.ora:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/listener_prim.ora
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/listener_prim.ora'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000666'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/dbsetup.sql:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbsetup.sql
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbsetup.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/oracleexec.sh:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/oracleexec.sh
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/oracleexec.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/tns_stdb.ora:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/tns_stdb.ora
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/tns_stdb.ora'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000666'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-post.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-post.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-post.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config122.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config122.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config122.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/asm-config.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/asm-config.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/asm-config.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/grid-setup.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/grid-setup122.rsp:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup122.rsp
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup122.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/bootstrap.sh:
-              source: !Sub
-                - https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/bootstrap.sh
-                - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
-                  S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
+              source: 
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/bootstrap.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
@@ -1225,8 +1238,8 @@ Resources:
                       OSBPass|${OSBPass}
                     - QuickStartS3URL: !If
                         - GovCloudCondition
-                        - https://s3-us-gov-west-1.amazonaws.com
-                        - https://s3.amazonaws.com
+                          - 'https://s3-us-gov-west-1.amazonaws.com
+                          - 'https://s3.amazonaws.com
                   - Code|
                   - !FindInMap
                     - OracleAMINameMap
@@ -1255,254 +1268,231 @@ Resources:
               owner: root
               group: root
             /tmp/rmanbackup.cmd:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rmanbackup-sb.cmd
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/rmanbackup-sb.cmd'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config-sb.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config-sb.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config-sb.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config-sb122.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config-sb122.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config-sb122.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/dbsetup-sb.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbsetup-sb.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbsetup-sb.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/osb.sh:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/osb.sh
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/osb.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/dbcheck.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbcheck.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbcheck.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/dbbroker.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbbroker.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbbroker.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/dbsetup.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/dbsetup.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/dbsetup.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/start.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/start.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/start.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/start2.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/start2.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/start2.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/stop.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/stop.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/stop.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/post-duplicate.sql:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/post-duplicate.sql
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/post-duplicate.sql'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/rman.cmd:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rman.cmd
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/rman.cmd'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/rman2.cmd:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/rman2.cmd
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/rman2.cmd'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000777'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/oracleexec-sb.sh:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/oracleexec-sb.sh
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/oracleexec-sb.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/listener_stdb.ora:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/listener_stdb.ora
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/listener_stdb.ora'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000666'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-post.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-post.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-post.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/db-config.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/db-config122.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/db-config122.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/scripts/db-config122.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/asm-config.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/asm-config.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/asm-config.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/grid-setup.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/grid-setup122.rsp:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/grid-setup122.rsp
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/grid-setup122.rsp'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000644'
               owner: root
               group: root
               authentication: S3AccessCreds
             /tmp/bootstrap.sh:
-              source: !Sub
-                - https://${QSS3BucketName}.${QSS3Region}.amazonaws.com/${QSS3KeyPrefix}scripts/bootstrap.sh
-                - QSS3Region: !If
-                    - GovCloudCondition
-                    - s3-us-gov-west-1
-                    - s3
+              source:
+                !Sub
+                  - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}scripts/bootstrap.sh'
+                  - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+                    S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
               mode: '000550'
               owner: root
               group: root
@@ -1512,7 +1502,7 @@ Resources:
           type: S3
           buckets:
             - !Ref 'InstallBucketName'
-            - !Ref 'QSS3BucketName'
+            - !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
           roleName: !Ref 'InstanceRoleOrcl'
     Properties:
       EbsOptimized: !If
