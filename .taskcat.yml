@@ -35,7 +35,7 @@ tests:
       EBSData: '20'
       EBSReco: '6'
       EnableCWL: 'true'
-      InstallBucketName: $[taskcat_autobucket]
+      InstallBucketName: override
       KeyPairName: $[taskcat_getkeypair]
       OSBBucketName: override
       OSBInstall: 'false'
