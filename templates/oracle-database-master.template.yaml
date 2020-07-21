@@ -11,7 +11,7 @@ Description: >-
   Version, and linuxx64_12201_database.zip and linuxx64_12201_grid_home.zip for Oracle
   12.2.0.1 Version, oracleasm-support-2.1.8-1.el6.x86_64.rpm and oracleasmlib-2.0.4-1.el6.x86_64.rpm
   for Oracle Linux 6.7 or RHEL 7.2, and oracleasmlib-2.0.12-1.el7.x86_64.rpm for Oracle
-  Linux 7.3. OracleSecureBackup needs: osbws_installer.zip.
+  Linux 7.3. OracleSecureBackup needs: osbws_installer.zip. (qs-1qui35es5)
 Metadata:
   AWS::CloudFormation::Interface:
     ParameterGroups:

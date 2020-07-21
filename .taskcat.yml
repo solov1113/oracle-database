@@ -58,6 +58,8 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     #- ap-northeast-1
     - us-west-2
