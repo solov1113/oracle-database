@@ -1,10 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
-  This template creates a VPC with multi-AZ deployment of enterprise class Oracle
+  Creates a VPC with multi-AZ deployment of enterprise class Oracle
   Database and Grid Infrastructure 12c. It will deploy database instances into the
   private subnets in separate Availability Zones. ***NOTE*** You must have Oracle
   Enterprise licensing to use Oracle Data Guard. See the deployment guide at http://aws.amazon.com/quickstart
-  for details. This template creates Amazon EC2 instances and related resources. You
+  for details. Creates Amazon EC2 instances and related resources. You
   will be billed for the AWS resources used if you create a stack from this template.
   Files needed: linuxamd64_12102_database_1of2.zip, linuxamd64_12102_database_2of2.zip,
   linuxamd64_12102_grid_1of2.zip and linuxamd64_12102_grid_2of2.zip for Oracle 12.1.0.2

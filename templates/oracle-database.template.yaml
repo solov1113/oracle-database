@@ -1,9 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: >-
-  This creates an Oracle Database and Grid Infrastructure 12c. It will deploy database
+  Creates an Oracle Database and Grid Infrastructure 12c. It will deploy database
   instances into the private subnets in separate Availability Zones. ***NOTE*** You
   must have Oracle Enterprise licensing to use Oracle Data Guard. See the deployment
-  guide at http://aws.amazon.com/quickstart for details. This template creates Amazon
+  guide at http://aws.amazon.com/quickstart for details. Creates Amazon
   EC2 instances and related resources. You will be billed for the AWS resources used
   if you create a stack from this template. The following Oracle downloads must be
   in your bucket: linuxamd64_12102_database_1of2.zip, linuxamd64_12102_database_2of2.zip,
