@@ -1,0 +1,21 @@
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-quickstart-oracle-database-master-defaults-12201-ol73-cc0b1306ae534e89b80547ccc71cd6aa
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [VPCStack].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------------------------------------------------------------------------------  ---------------------------------------------------------------------------------------------
+2020-07-22 18:56:06.234000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-cc0b1306ae534e89b80547ccc71cd6aa  The following resource(s) failed to create: [VPCStack].
+2020-07-22 18:56:05.214000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  VPCStack                                                                                     S3 error: Access Denied
+                                                                                                                                                                               For more information check http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html
+2020-07-22 18:56:04.499000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack
+2020-07-22 18:55:55.921000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-cc0b1306ae534e89b80547ccc71cd6aa  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Wednesday, 22. July 2020 06:56PM
+-----------------------------------------------------------------------------
+

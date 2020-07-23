@@ -1,0 +1,143 @@
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a36ba67f7a95ed4
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [BastionStack].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                                            ResourceStatusReason
+--------------------------------  ------------------  --------------------------  -------------------------------------------------------------------------------------------  ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2020-07-22 22:49:02.673000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a36ba67f7a95ed4  The following resource(s) failed to create: [BastionStack].
+2020-07-22 22:49:01.578000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  BastionStack                                                                                 Embedded stack arn:aws:cloudformation:us-east-1:460759395214:stack/tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c-BastionStack-WQO1M6WOT8SD/7be41c30-cc6d-11ea-92b9-0e403b617781 was not successfully created: The following resource(s) failed to create: [BastionSecurityGroup, EIP1, BastionHostRole].
+2020-07-22 22:48:39.492000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  BastionStack                                                                                 Resource creation Initiated
+2020-07-22 22:48:38.491000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  BastionStack
+2020-07-22 22:48:34.063000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack  VPCStack
+2020-07-22 22:44:29.441000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack                                                                                     Resource creation Initiated
+2020-07-22 22:44:28.238000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  VPCStack
+2020-07-22 22:44:20.563000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a36ba67f7a95ed4  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Wednesday, 22. July 2020 10:49PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a-VPCStack-161ZGO199FOG4
+*****************************************************************************
+ResourceStatusReason:  
+Stack launch was successful
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                           LogicalResourceId                                                                                     ResourceStatusReason
+--------------------------------  ------------------  -------------------------------------  ----------------------------------------------------------------------------------------------------  ---------------------------
+2020-07-22 22:48:21.309000+00:00  CREATE_COMPLETE     AWS::CloudFormation::Stack             tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a-VPCStack-161ZGO199FOG4
+2020-07-22 22:48:15.503000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PrivateSubnet1ARoute
+2020-07-22 22:47:59.961000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet1ARoute                                                                                  Resource creation Initiated
+2020-07-22 22:47:59.167000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet1ARoute
+2020-07-22 22:47:59.087000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PrivateSubnet2ARoute
+2020-07-22 22:47:54.911000+00:00  CREATE_COMPLETE     AWS::EC2::NatGateway                   NATGateway1
+2020-07-22 22:47:43.657000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet2ARoute                                                                                  Resource creation Initiated
+2020-07-22 22:47:42.787000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PrivateSubnet2ARoute
+2020-07-22 22:47:38.882000+00:00  CREATE_COMPLETE     AWS::EC2::NatGateway                   NATGateway2
+2020-07-22 22:45:51.048000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway1                                                                                           Resource creation Initiated
+2020-07-22 22:45:50.410000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway1
+2020-07-22 22:45:50.360000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway2                                                                                           Resource creation Initiated
+2020-07-22 22:45:49.637000+00:00  CREATE_IN_PROGRESS  AWS::EC2::NatGateway                   NATGateway2
+2020-07-22 22:45:45.712000+00:00  CREATE_COMPLETE     AWS::EC2::EIP                          NAT1EIP
+2020-07-22 22:45:45.325000+00:00  CREATE_COMPLETE     AWS::EC2::EIP                          NAT2EIP
+2020-07-22 22:45:44.327000+00:00  CREATE_COMPLETE     AWS::EC2::Route                        PublicSubnetRoute
+2020-07-22 22:45:38.018000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation
+2020-07-22 22:45:37.977000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation
+2020-07-22 22:45:36.812000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2020-07-22 22:45:36.585000+00:00  CREATE_COMPLETE     AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2020-07-22 22:45:29.314000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT1EIP                                                                                               Resource creation Initiated
+2020-07-22 22:45:29.050000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT2EIP                                                                                               Resource creation Initiated
+2020-07-22 22:45:28.853000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PublicSubnetRoute                                                                                     Resource creation Initiated
+2020-07-22 22:45:28.640000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT1EIP
+2020-07-22 22:45:28.404000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP                          NAT2EIP
+2020-07-22 22:45:28.310000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Route                        PublicSubnetRoute
+2020-07-22 22:45:23.962000+00:00  CREATE_COMPLETE     AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment
+2020-07-22 22:45:22.561000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation                                                                    Resource creation Initiated
+2020-07-22 22:45:22.533000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation                                                                    Resource creation Initiated
+2020-07-22 22:45:21.672000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet1RouteTableAssociation
+2020-07-22 22:45:21.354000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PublicSubnet2RouteTableAssociation
+2020-07-22 22:45:21.354000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation                                                                  Resource creation Initiated
+2020-07-22 22:45:21.130000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation                                                                  Resource creation Initiated
+2020-07-22 22:45:20.504000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet2ARouteTableAssociation
+2020-07-22 22:45:19.860000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SubnetRouteTableAssociation  PrivateSubnet1ARouteTableAssociation
+2020-07-22 22:45:17.206000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PublicSubnet1
+2020-07-22 22:45:17.074000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PublicSubnet2
+2020-07-22 22:45:16.475000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet2A
+2020-07-22 22:45:16.137000+00:00  CREATE_COMPLETE     AWS::EC2::Subnet                       PrivateSubnet1A
+2020-07-22 22:45:08.705000+00:00  CREATE_COMPLETE     AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2020-07-22 22:45:08.546000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment                                                                                  Resource creation Initiated
+2020-07-22 22:45:08.288000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint                                                                                         Resource creation Initiated
+2020-07-22 22:45:08.150000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCGatewayAttachment         VPCGatewayAttachment
+2020-07-22 22:45:07.746000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCEndpoint                  S3VPCEndpoint
+2020-07-22 22:45:01.679000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2020-07-22 22:45:00.988000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PublicSubnetRouteTable
+2020-07-22 22:45:00.841000+00:00  CREATE_COMPLETE     AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2020-07-22 22:45:00.800000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet1                                                                                         Resource creation Initiated
+2020-07-22 22:45:00.557000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet2                                                                                         Resource creation Initiated
+2020-07-22 22:45:00.474000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable                                                                             Resource creation Initiated
+2020-07-22 22:45:00.340000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet1
+2020-07-22 22:45:00.259000+00:00  CREATE_COMPLETE     AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2020-07-22 22:45:00.218000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A                                                                                       Resource creation Initiated
+2020-07-22 22:45:00.098000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet2ARouteTable
+2020-07-22 22:45:00.082000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation                                                                             Resource creation Initiated
+2020-07-22 22:45:00.001000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PublicSubnet2
+2020-07-22 22:44:59.863000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A                                                                                       Resource creation Initiated
+2020-07-22 22:44:59.852000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PublicSubnetRouteTable                                                                                Resource creation Initiated
+2020-07-22 22:44:59.745000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet2A
+2020-07-22 22:44:59.616000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable                                                                             Resource creation Initiated
+2020-07-22 22:44:59.578000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPCDHCPOptionsAssociation    VPCDHCPOptionsAssociation
+2020-07-22 22:44:59.313000+00:00  CREATE_IN_PROGRESS  AWS::EC2::Subnet                       PrivateSubnet1A
+2020-07-22 22:44:59.306000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PublicSubnetRouteTable
+2020-07-22 22:44:59.231000+00:00  CREATE_IN_PROGRESS  AWS::EC2::RouteTable                   PrivateSubnet1ARouteTable
+2020-07-22 22:44:55.403000+00:00  CREATE_COMPLETE     AWS::EC2::VPC                          VPC
+2020-07-22 22:44:54.368000+00:00  CREATE_COMPLETE     AWS::EC2::InternetGateway              InternetGateway
+2020-07-22 22:44:53.570000+00:00  CREATE_COMPLETE     AWS::EC2::DHCPOptions                  DHCPOptions
+2020-07-22 22:44:38.550000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC                                                                                                   Resource creation Initiated
+2020-07-22 22:44:38.136000+00:00  CREATE_IN_PROGRESS  AWS::EC2::InternetGateway              InternetGateway                                                                                       Resource creation Initiated
+2020-07-22 22:44:38.030000+00:00  CREATE_IN_PROGRESS  AWS::EC2::VPC                          VPC
+2020-07-22 22:44:37.697000+00:00  CREATE_IN_PROGRESS  AWS::EC2::InternetGateway              InternetGateway
+2020-07-22 22:44:37.490000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions                                                                                           Resource creation Initiated
+2020-07-22 22:44:37.063000+00:00  CREATE_IN_PROGRESS  AWS::EC2::DHCPOptions                  DHCPOptions
+2020-07-22 22:44:29.224000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack             tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c4e9a-VPCStack-161ZGO199FOG4  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Wednesday, 22. July 2020 10:49PM
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+Region: us-east-1
+StackName: tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c-BastionStack-WQO1M6WOT8SD
+*****************************************************************************
+ResourceStatusReason:  
+The following resource(s) failed to create: [BastionSecurityGroup, EIP1,
+BastionHostRole].
+*****************************************************************************
+*****************************************************************************
+Events:  
+TimeStamp                         ResourceStatus      ResourceType                LogicalResourceId                                                                                    ResourceStatusReason
+--------------------------------  ------------------  --------------------------  ---------------------------------------------------------------------------------------------------  ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+2020-07-22 22:48:51.910000+00:00  CREATE_FAILED       AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c-BastionStack-WQO1M6WOT8SD  The following resource(s) failed to create: [BastionSecurityGroup, EIP1, BastionHostRole].
+2020-07-22 22:48:51.016000+00:00  CREATE_FAILED       AWS::EC2::SecurityGroup     BastionSecurityGroup                                                                                 Resource creation cancelled
+2020-07-22 22:48:47.943000+00:00  CREATE_FAILED       AWS::IAM::Role              BastionHostRole                                                                                      Resource creation cancelled
+2020-07-22 22:48:47.489000+00:00  CREATE_FAILED       AWS::EC2::EIP               EIP1                                                                                                 The maximum number of addresses has been reached. (Service: AmazonEC2; Status Code: 400; Error Code: AddressLimitExceeded; Request ID: 0625f436-dd27-4427-ba33-60ee0961382a)
+2020-07-22 22:48:47.071000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              BastionHostRole                                                                                      Resource creation Initiated
+2020-07-22 22:48:46.820000+00:00  CREATE_IN_PROGRESS  AWS::EC2::EIP               EIP1
+2020-07-22 22:48:46.731000+00:00  CREATE_IN_PROGRESS  AWS::IAM::Role              BastionHostRole
+2020-07-22 22:48:46.204000+00:00  CREATE_IN_PROGRESS  AWS::EC2::SecurityGroup     BastionSecurityGroup
+2020-07-22 22:48:46.007000+00:00  CREATE_COMPLETE     AWS::Logs::LogGroup         BastionMainLogGroup
+2020-07-22 22:48:45.638000+00:00  CREATE_IN_PROGRESS  AWS::Logs::LogGroup         BastionMainLogGroup                                                                                  Resource creation Initiated
+2020-07-22 22:48:45.317000+00:00  CREATE_IN_PROGRESS  AWS::Logs::LogGroup         BastionMainLogGroup
+2020-07-22 22:48:39.296000+00:00  CREATE_IN_PROGRESS  AWS::CloudFormation::Stack  tCaT-quickstart-oracle-database-master-defaults-12201-ol73-a7fabc1ffedd4c-BastionStack-WQO1M6WOT8SD  User Initiated
+*****************************************************************************
+-----------------------------------------------------------------------------
+Tested on: Wednesday, 22. July 2020 10:49PM
+-----------------------------------------------------------------------------
+
