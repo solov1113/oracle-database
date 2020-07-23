@@ -62,7 +62,6 @@ tests:
     regions:
     #- ap-northeast-1
     - us-west-2
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-defaults-12102-rhel72:
     parameters:
@@ -104,9 +103,10 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - ap-southeast-1
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-defaults-12201-ol73:
     parameters:
@@ -148,9 +148,10 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - us-east-1
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-defaults-12201-rhel72:
     parameters:
@@ -192,10 +193,11 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - ap-southeast-2
     - ca-central-1
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-single-12102-ol73:
     parameters:
@@ -237,10 +239,11 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - ap-northeast-2
     - eu-west-1
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-single-12102-rhel72:
     parameters:
@@ -282,10 +285,11 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - eu-central-1
     - eu-west-2
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-single-12201-ol73:
     parameters:
@@ -327,10 +331,11 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - us-west-1
     - us-west-2
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
   master-single-12201-rhel72:
     parameters:
@@ -372,7 +377,8 @@ tests:
       StandbyIPAddress: 10.0.32.5
       StandbyName: orclsb
       VPCCIDR: 10.0.0.0/16
+      QSS3BucketName: $[taskcat_autobucket]
+      QSS3BucketRegion: $[taskcat_current_region]
     regions:
     - us-east-2
-    s3_bucket: ''
     template: templates/oracle-database-master.template.yaml
