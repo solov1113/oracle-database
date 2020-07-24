@@ -13,6 +13,10 @@ Description: >-
   for Oracle Linux 6.7 or RHEL 7.2, and oracleasmlib-2.0.12-1.el7.x86_64.rpm for Oracle
   Linux 7.3. OracleSecureBackup needs: osbws_installer.zip. (qs-1qui35es5)
 Metadata:
+  QuickStartDocumentation:
+    EntrypointName: "Launch into a new VPC"
+    OptionalParameters:
+      - OSBInstall
   AWS::CloudFormation::Interface:
     ParameterGroups:
       - Label:
