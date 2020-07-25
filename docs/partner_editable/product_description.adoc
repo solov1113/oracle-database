@@ -54,6 +54,7 @@ To ensure a high level of security, AWS provides the Amazon Virtual Private Clou
 
 We recommend that you create databases in private subnets, and use NAT gateways for internet access. This will ensure that your databases are not exposed to the internet, but can be updated via download packages. Database subnets should be accessible from your VPN (or AWS Direct Connect connection, if you have one), and from your application subnets. This Quick Start automatically sets up a VPC based on AWS best practices. It also sets up public and private subnets, NAT gateways, and bastion hosts in an Auto Scaling group to access your database instances. 
 
+:xrefstyle: short
 [#network_planning]
 .Network Planning for _{partner-product-name}_ on AWS
 [link=images/network_planning.png]
