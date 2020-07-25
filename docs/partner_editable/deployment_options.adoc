@@ -16,7 +16,7 @@ In Oracle Database 12c Enterprise Edition, you can choose to use the standard Li
 [#installation_summary]
 .Installation Summary for _{partner-product-name}_ on AWS
 [link=images/installation_summary.png]
-image::../images/installation_summary.png[Architecture,width=648,height=439]
+image::../images/installation_summary.png[installation_summary,width=648,height=439]
 
 === Operating System for Deployment
 
@@ -30,7 +30,7 @@ This Quick Start uses Oracle ASM as the storage layer of the virtual machine, be
 [#asm_disk_groups]
 .ASM Disk Groups
 [link=images/asm_disk_groups.png]
-image::../images/asm_disk_groups.png[Architecture,width=648,height=439]
+image::../images/asm_disk_groups.png[asm_disk_groups,width=648,height=439]
 
 This Quick Start gives you a choice of General Purpose SSD (gp2) volumes or Provisioned IOPS SSD (io1) volumes.
 
