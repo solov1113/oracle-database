@@ -53,3 +53,10 @@ You can set up an Oracle primary and standby relationship between two EC2 instan
 To ensure a high level of security, AWS provides the Amazon Virtual Private Cloud (Amazon VPC) service, which lets you provision logically isolated sections of the AWS Cloud where you can launch AWS resources in a virtual network that you define. When you create a VPC, you specify its size in the form of a Classless Inter-Domain Routing (CIDR) block. You can define a VPC as large as a /16 CIDR block or as small as a /28 CIDR block, depending on the number of subnets and IP addresses you would like to use. For more information about VPCs and subnets, see the http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html[AWS documentation].
 
 We recommend that you create databases in private subnets, and use NAT gateways for internet access. This will ensure that your databases are not exposed to the internet, but can be updated via download packages. Database subnets should be accessible from your VPN (or AWS Direct Connect connection, if you have one), and from your application subnets. This Quick Start automatically sets up a VPC based on AWS best practices. It also sets up public and private subnets, NAT gateways, and bastion hosts in an Auto Scaling group to access your database instances. 
+
+[#network_planning]
+.Network Planning for _{partner-product-name}_ on AWS
+[link=images/network_planning.png]
+image::../images/network_planning.png[Architecture,width=648,height=439]
+
+If you want to establish a secure connection between your on-premises data center and your VPC, you can use a VPN connection or a dedicated network connection (AWS Direct Connect).
