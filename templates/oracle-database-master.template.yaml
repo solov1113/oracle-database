@@ -33,7 +33,7 @@ Metadata:
           default: Amazon EC2 Configuration
         Parameters:
           - KeyPairName
-          - NATInstanceType
+          #- NATInstanceType
           - OracleAMIOS
           - OracleInstanceType
           - PrimaryIPAddress
@@ -122,8 +122,8 @@ Metadata:
         default: Binaries Bucket Key Prefix
       KeyPairName:
         default: Key Pair Name
-      NATInstanceType:
-        default: NAT Instance Type
+      #NATInstanceType:
+      #  default: NAT Instance Type
       OracleAMIOS:
         default: Database Operating System
       OracleInstanceType:
