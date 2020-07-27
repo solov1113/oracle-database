@@ -1,6 +1,6 @@
 :quickstart-project-name: quickstart-oracle-database
 :partner-product-name: Oracle Database
-:partner-company-name: The Quick Starts Team
+:partner-company-name: Oracle
 :doc-month: January
 :doc-year: 2018
 :partner-contributors:
