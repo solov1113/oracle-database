@@ -23,7 +23,7 @@ ssh –A oracle@orcl.dataguard-env
 
 :xrefstyle: short
 [#access_oracle_db_instance_1]
-.ASM Disk Groups
+.Access Oracle Instance
 [link=images/access_oracle_db_instance_1.png]
 image::../images/access_oracle_db_instance_1.png[access_oracle_db_instance_1,width=648,height=439]
 
@@ -33,7 +33,7 @@ ssh –A oracle@10.0.0.5
 
 :xrefstyle: short
 [#access_oracle_db_instance_2]
-.ASM Disk Groups
+.Access Oracle Instance
 [link=images/access_oracle_db_instance_2.png]
 image::../images/access_oracle_db_instance_2.png[access_oracle_db_instance_2,width=648,height=439]
 
@@ -41,7 +41,7 @@ If you have an X terminal such as http://mobaxterm.mobatek.net/[MobaXterm], you 
 
 :xrefstyle: short
 [#access_oracle_db_instance_3]
-.ASM Disk Groups
+.Access Oracle Instance
 [link=images/access_oracle_db_instance_3.png]
 image::../images/access_oracle_db_instance_3.png[access_oracle_db_instance_3,width=648,height=439]
 
@@ -49,7 +49,7 @@ You can also access port 5500 via a browser by using `system` or `sys users` wit
 
 :xrefstyle: short
 [#access_oracle_db_instance_4]
-.ASM Disk Groups
+.Access Oracle Instance
 [link=images/access_oracle_db_instance_4.png]
 image::../images/access_oracle_db_instance_4.png[access_oracle_db_instance_4,width=648,height=439]
 
@@ -67,7 +67,7 @@ SELECT sequence#, first_time, next_time, applied FROM   v$archived
 
 :xrefstyle: short
 [#check_environment_1]
-.ASM Disk Groups
+.Check Your Environment
 [link=images/check_environment_1.png]
 image::../images/check_environment_1.png[check_environment_1,width=648,height=439]
 
@@ -82,20 +82,124 @@ SELECT sequence#, first_time, next_time, applied FROM   v$archived_log ORDER BY 
 
 :xrefstyle: short
 [#check_environment_2]
-.ASM Disk Groups
+.Check Your Environment
 [link=images/check_environment_2.png]
 image::../images/check_environment_2.png[check_environment_2,width=648,height=439]
 
-
 == Best practices for using {partner-product-name} on AWS
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
 
-_Add any best practices for using the software._
+=== Working with Oracle Data Guard
+
+After completing the deployment, you can change Oracle Data Guard configurations and also perform a switchover.
+
+==== Viewing Your Configuration
+
+You can use the Oracle command-line interface (DGMGRL) to administer your Data Guard solution. To view your configuration, log into DGMGRL and use the `SHOW CONFIGURATION` command. See if the protection mode is `MaxPerformance`, which means that it has asynchronous replication in place. In this example, the primary instance is `orcl` and the standby instance is `orclsb`.
+
+:xrefstyle: short
+[#view_config_1]
+.Viewing Your Configuration
+[link=images/view_config_1.png]
+image::../images/view_config_1.png[view_config_1,width=648,height=439]
+
+For a more detailed view, you can show the database replication configurations. In the following example, notice that LogXptMode='async'.
+
+----
+# dgmgrl sys/pass@instance 
+show database verbose 'databasename';
+----
+
+:xrefstyle: short
+[#view_config_2]
+.Viewing Your Configuration
+[link=images/view_config_2.png]
+image::../images/view_config_2.png[view_config_2,width=648,height=439]
+
+==== Changing Your Configuration
+If you would like to change the protection mode from maximum performance (`MaxPerformance`) to maximum availability (`MaxAvailability`) for synchronous replication, you can change it with DGMGRL, and then monitor your performance. This will set up synchronous replication from the primary database (`orcl`) to the standby database (`orclsb`) with the lowest recovery point objective (RPO) in the event of primary database failure.
+
+----
+edit database databasename set property 'LogXptMode'='sync';
+edit database standbydatabase set property 'LogXptMode'='sync';
+
+EDIT CONFIGURATION SET PROTECTION MODE AS MAXAVAILABILITY;
+----
+
+:xrefstyle: short
+[#change_config_1]
+.Changing Your Configuration
+[link=images/change_config_1.png]
+image::../images/change_config_1.png[change_config_1,width=648,height=439]
+
+For more information about performance modes, see the section link:#_ha_scenarios_with_oracle_data_guard_on_aws[HA Scenarios with Oracle Data Guard on AWS] previously in this guide.
+
+==== Switching to the Standby Database
+You can use the DGMGRL SWITCHOVER command to switch from the primary database (`orcl`) to the secondary database (`orclsb`).
+
+:xrefstyle: short
+[#switching_to_standby_db_1]
+.Switching to the Standby Database
+[link=images/switching_to_standby_db_1.png]
+image::../images/switching_to_standby_db_1.png[switching_to_standby_db_1,width=648,height=439]
+
+If you have not logged in with the SYS password, you may receive the following error. 
+
+:xrefstyle: short
+[#switching_to_standby_db_2]
+.Switching to the Standby Database
+[link=images/switching_to_standby_db_2.png]
+image::../images/switching_to_standby_db_2.png[switching_to_standby_db_2,width=648,height=439]
+
+After the primary orcl instance is shut down and started back up, you may see the configuration switchover.
+ 
+:xrefstyle: short
+[#switching_to_standby_db_3]
+.Switching to the Standby Database
+[link=images/switching_to_standby_db_3.png]
+image::../images/switching_to_standby_db_3.png[switching_to_standby_db_3,width=648,height=439]
+
+If you are logged in with the SYS password, you may fail over without the need for manual shutdown and startup.
+You can also enable fast-start failover by following the instructions in the https://docs.oracle.com/cd/B28359_01/server.111/b28295/cli.htm#BABEIIHD[Oracle documentation].
+
+==== Switching Your DNS Configuration
+When you switch over to the standby database, you should also update your record set in the Amazon Route 53 private hosted zone to point to the standby database:
+
+.	Sign in to the AWS Management Console and open the Amazon Route 53 console at https://console.aws.amazon.com/route53/.   
+.	Find your IP record inside your private hosted zone and change it to your standby (new primary) IP, so your application can continuously reach your primary database on the private hosted zone, and then save the record.
+
+:xrefstyle: short
+[#switch_dns_config_1]
+.Switching Your DNS Configuration
+[link=images/switch_dns_config_1.png]
+image::../images/switch_dns_config_1.png[switch_dns_config_1,width=648,height=439]
 
 == Security
-// Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
+When you deploy systems on the AWS Cloud, security responsibilities are shared between you and AWS. AWS operates, manages, and controls the components from the host operating system and virtualization layer down to the physical security of the facilities in which the services operate. In turn, you assume responsibility and management of the guest operating system (including updates and security patches), other associated application software such as Oracle Database and Oracle Grid Infrastructure, as well as the configuration of the AWS-provided security group firewall. For more information about security on AWS, visit the https://aws.amazon.com/security/[AWS Security Center].
 
-_Add any security-related information._
+=== Network Security
+The default network security setup of this solution follows AWS security best practices. The provisioned Oracle Database instances are deployed in private subnets and can only be accessed in three ways:
+
+*	By connecting to the bastion host instance by using an SSH terminal.
+*	From AWS resources (such as EC2, RDS, or other instances) that you might have in the OracleServerAccessSecurityGroup security group, or that you might launch using the security group. You may include your application instance in this security group.
+*	By including new rules in OracleServerSecurityGroup to allow access to your database from a known IP block CIDR; for example, you might add an inbound rule to enable the VLAN 10.50.10.0/24 in your data center to connect through a VPN or AWS Direct Connect.
+
+//Image
+
+Figure 12: Adding inbound rules to your security group
+OS Security
+To gain root access to your instances you may use ec2-user or oracle user, and then sudo to root.
+You have to keep the Amazon EC2 PEM key you are using secure in your environment. Also, keep in mind that AWS doesn’t store your keys, so if you lose your key, you may not be able to access your instances.
+Security Groups
+A security group acts as a firewall that controls the traffic for one or more instances. When you launch an instance, you associate one or more security groups with the instance. You add rules to each security group that allow traffic to or from its associated instances. You can modify the rules for a security group at any time. The new rules are automatically applied to all instances that are associated with the security group. 
+This Quick Start creates three security groups: OracleServerAccessSecurityGroup, OracleServerSecurityGroup, and OracleServersSecurityGroup. After the Quick Start deployment, you are responsible for maintaining these security groups and including or excluding rules.
+•	OracleServerSecurityGroup is used to grant the bastion hosts access to port 22 of the Oracle instances.
+•	OracleServersSecurityGroup is used only for communications between database instances: primary and standby instances on database ports, SSH, and NFS ports.
+•	OracleServerAccessSecurityGroup gives EC2 instances access to your database on the port you set up for database listeners, and on port 5500 for Oracle Enterprise Manager. 
+
+
+
+
+
 
 == Other useful information
 //Provide any other information of interest to users, especially focusing on areas where AWS or cloud usage differs from on-premises usage.
