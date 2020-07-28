@@ -1,11 +1,91 @@
 // Add steps as necessary for accessing the software, post-configuration, and testing. Don’t include full usage instructions for your software, but add links to your product documentation for that information.
 //Should any sections not be applicable, remove them
 
-== Test the deployment
+//== Test the deployment
 // If steps are required to test the deployment, add them here. If not, remove the heading
 
 == Post deployment steps
-// If Post-deployment steps are required, add them here. If not, remove the heading
+
+=== Files and Directories
+Installation files are downloaded from your S3 bucket to the `/u01/install` directory. Logs and some temporary configuration files are created in `/tmp`. Files exchanged between the primary database instance and the standby database instance are placed in an NFS /shared file system. Oracle home directories are in:
+
+*	`/u01/app/oracle/product/12c/db_1` for Oracle Database
+*	`/u01/app/oracle/product/12c/grid` for Oracle Grid Infrastructure
+
+=== Access Your Oracle Database Instance
+
+.	Access the bastion host (created by the Quick Start template for a new VPC) or launch an EC2 instance in the public subnet, and optionally associate it with the Access Database security group (if you want access to the Oracle listener or Enterprise Manager ports). You can use SSH Agent Forwarding if the same public keys are in use.
+.	From this machine, you can access the instances with SSH (port 22) or the database in the port you defined. You can use the user name “oracle” or “ec2-user” with the PEM key you defined (SSH Agent Forwarding for the private key and `orcl.dataguard-env/10.0.0.5` as the example host/address for the Oracle database hosts in the example). 
+
+----
+ssh –A oracle@orcl.dataguard-env
+----
+
+:xrefstyle: short
+[#access_oracle_db_instance_1]
+.ASM Disk Groups
+[link=images/access_oracle_db_instance_1.png]
+image::../images/access_oracle_db_instance_1.png[access_oracle_db_instance_1,width=648,height=439]
+
+----
+ssh –A oracle@10.0.0.5
+----
+
+:xrefstyle: short
+[#access_oracle_db_instance_2]
+.ASM Disk Groups
+[link=images/access_oracle_db_instance_2.png]
+image::../images/access_oracle_db_instance_2.png[access_oracle_db_instance_2,width=648,height=439]
+
+If you have an X terminal such as http://mobaxterm.mobatek.net/[MobaXterm], you can start Java utilities like DBCA and NETCA to manage your EC2 Oracle instance. Database instances are already configured with X11 Linux graphic packages.
+
+:xrefstyle: short
+[#access_oracle_db_instance_3]
+.ASM Disk Groups
+[link=images/access_oracle_db_instance_3.png]
+image::../images/access_oracle_db_instance_3.png[access_oracle_db_instance_3,width=648,height=439]
+
+You can also access port 5500 via a browser by using `system` or `sys users` with the password you set, with `https://ip:5500/em/login` (for example, `https://172.31.3.20:5500/em/login`).
+
+:xrefstyle: short
+[#access_oracle_db_instance_4]
+.ASM Disk Groups
+[link=images/access_oracle_db_instance_4.png]
+image::../images/access_oracle_db_instance_4.png[access_oracle_db_instance_4,width=648,height=439]
+
+=== Check Your Environment
+To check whether the standby database has been set up and the logs are in sync, log in to the primary database and force a log switch. This creates an archived log that is shipped to the standby database.
+
+----
+# ssh –A oracle@orcl.dataguard-env
+# sqlplus / as sysdba   
+set pages 1000 line 150
+alter system switch logfile;
+ALTER SESSION SET nls_date_format='DD-MON-YYYY HH24:MI:SS';
+SELECT sequence#, first_time, next_time, applied FROM   v$archived
+----
+
+:xrefstyle: short
+[#check_environment_1]
+.ASM Disk Groups
+[link=images/check_environment_1.png]
+image::../images/check_environment_1.png[check_environment_1,width=648,height=439]
+
+Then log in to the standby machine to see the applied logs generated.
+----
+# ssh –A oracle@orcl.dataguard-env 
+# sqlplus / as sysdba
+set pages 1000 line 150
+ALTER SESSION SET nls_date_format='DD-MON-YYYY HH24:MI:SS';
+SELECT sequence#, first_time, next_time, applied FROM   v$archived_log ORDER BY sequence#;
+----
+
+:xrefstyle: short
+[#check_environment_2]
+.ASM Disk Groups
+[link=images/check_environment_2.png]
+image::../images/check_environment_2.png[check_environment_2,width=648,height=439]
+
 
 == Best practices for using {partner-product-name} on AWS
 // Provide post-deployment best practices for using the technology on AWS, including considerations such as migrating data, backups, ensuring high performance, high availability, etc. Link to software documentation for detailed information.
