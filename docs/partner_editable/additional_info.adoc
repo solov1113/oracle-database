@@ -318,3 +318,146 @@ mount reco
 .AMIs and Snapshots
 [link=images/amis_snapshots_1.png]
 image::../images/amis_snapshots_1.png[amis_snapshots_1,width=648,height=439]
+
+=== Additional Resources
+
+==== AWS Services
+
+*	AWS CloudFormation
+**	Documentation:
+https://aws.amazon.com/documentation/cloudformation/ 
+**	Helper scripts:
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-helper-scripts-reference.html
+*	Amazon EBS
+**	User guide: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html 
+**	Volume types: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html   
+**	Optimized instances: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html
+*	AWS Command Line Interface installation on Linux
+https://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-with-pip
+*	Amazon EC2 user guide for Linux
+https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/
+*	Amazon Route 53
+https://aws.amazon.com/documentation/route53/ 
+*	Amazon S3
+https://aws.amazon.com/documentation/s3/ 
+*	Amazon VPC
+https://aws.amazon.com/documentation/vpc/ 
+
+==== Red Hat Enterprise Linux documentation
+*	Swap space
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/Storage_Administration_Guide/ch-swapspace.html 
+*	xorg-x11 drivers packages
+https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/6/html/6.4_Technical_Notes/xorg-x11.html
+
+==== Oracle Database documentation
+*	Oracle Database Installation Guide
+https://docs.oracle.com/database/121/LADBI/toc.htm
+*	Oracle Grid Infrastructure Installation Guide
+https://docs.oracle.com/cd/E11882_01/install.112/e48194/app_nonint.htm#CWWIN417
+*	Oracle Data Guard Command-Line Interface Reference
+https://docs.oracle.com/database/121/DGBKR/dgmgrl.htm#DGBKR585
+*	Oracle Data Guard Concepts and Administration
+https://docs.oracle.com/database/121/SBYDB/concepts.htm#SBYDB00010
+*	Oracle ASMLib documentation
+http://www.oracle.com/technetwork/topics/linux/asmlib/index-101839.html
+*	Oracle ASMLib downloads for RHEL 7
+http://www.oracle.com/technetwork/server-storage/linux/asmlib/rhel7-2773795.html
+
+==== Oracle on AWS
+*	Advanced Architectures for Oracle Database on Amazon EC2
+https://d0.awsstatic.com/enterprise-marketing/Oracle/AWSAdvancedArchitecturesforOracleDBonEC2.pdf
+*	Best Practices for Running Oracle Database on AWS
+https://d0.awsstatic.com/whitepapers/best-practices-for-running-oracle-database-on-aws.pdf
+*	Strategies for Migrating Oracle Database to AWS
+https://d0.awsstatic.com/whitepapers/strategies-for-migrating-oracle-database-to-aws.pdf
+*	RDBMS in the Cloud: Oracle Database on AWS
+https://d0.awsstatic.com/whitepapers/aws-rdbms-oracle.pdf
+*	Amazon RDS for Oracle Database
+https://aws.amazon.com/rds/oracle/ 
+
+==== Oracle support notes
+Access to the following documents requires an Oracle account.
+
+*	OSB Cloud Module - FAQ (Doc ID 740226.1)
+https://support.oracle.com/epmos/faces/DocumentDisplay?id=740226.1 
+*	Requirements for Installing Oracle Database 12.1 on RHEL7 or OL7 64-bit (x86-64) (Doc ID 1961997.1)
+https://support.oracle.com/epmos/faces/DocumentDisplay?id=1961997.1 
+*	Master Note of Linux OS Requirements for Database Server (Doc ID 851598.1)
+https://support.oracle.com/epmos/faces/DocumentDisplay?id=851598.1 
+
+== Appendix A
+=== Data Replication Between AWS Regions
+
+For the greatest fault tolerance and stability, you can set up a Data Guard copy of your primary database in another AWS Region. This is a common disaster recovery scenario.
+
+This copy must be replicated asynchronously, considering the latency caused by the distance between Regions. Asynchronous replication avoids performance impact in your primary database, which are probably connected to each to standby database through a VPN connection. 
+
+For this scenario, you should also consider replicating your backup objects in an S3 bucket to make them available in more than one Region using cross-Region replication.
+
+:xrefstyle: short
+[#appendix_a_1]
+.Data Replication Between AWS Regions
+[link=images/appendix_a_1.png]
+image::../images/appendix_a_1.png[appendix_a_1,width=648,height=439]
+
+== Appendix B: 
+=== Adding Disks to ASM Disk Groups 
+
+After deployment, you might need more space for data files or archived log files. To gain more space, you can add EBS volumes to your DATA and RECO disk groups.
+
+. Create a new EBS volume in the Availability Zones in which you deployed your primary and standby instances. 
+
+[#appendix_b_1]
+.Adding Disks to ASM Disk Groups 
+[link=images/appendix_b_1.png]
+image::../images/appendix_b_1.png[appendix_b_1,width=648,height=439]
+
+[start=2]
+. Attach the new volumes to your instances. Take note of the last letter of the device name (for example, for /dev/sdl, the last letter is  l, and will appear in the OS as /dev/xvdl).
+
+[#appendix_b_2]
+.Adding Disks to ASM Disk Groups 
+[link=images/appendix_b_2.png]
+image::../images/appendix_b_2.png[appendix_b_2,width=648,height=439]
+
+[start=3]
+.	Log in to your instances and create a primary partition for the device:
+
+----
+sudo fdisk /dev/xvdl
+n    (new partition)
+p    (primary )
+<enter>   (default  1 )
+<enter>  (default xxx) 
+w    (write partition)
+----
+
+[#appendix_b_3]
+.Adding Disks to ASM Disk Groups 
+[link=images/appendix_b_3.png]
+image::../images/appendix_b_3.png[appendix_b_3,width=648,height=439]
+
+[start=4]
+. Make the partition available to ASM with a name; for example, DATA7. As an Oracle user, add the disk to the corresponding disk group:
+
+----
+sudo /etc/init.d/oracleasm createdisk DATA7 /dev/xvdl1
+----
+
+[#appendix_b_4]
+.Adding Disks to ASM Disk Groups 
+[link=images/appendix_b_4.png]
+image::../images/appendix_b_4.png[appendix_b_4,width=648,height=439]
+
+----
+sudo su – oracle
+. oraenv 
++ASM
+sqlplus / as sysasm
+alter diskgroup data add disk 'ORCL:DATA7'; 
+----
+
+[#appendix_b_5]
+.Adding Disks to ASM Disk Groups 
+[link=images/appendix_b_5.png]
+image::../images/appendix_b_5.png[appendix_b_5,width=648,height=439]
