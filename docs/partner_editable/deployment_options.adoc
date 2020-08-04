@@ -9,7 +9,8 @@ The Quick Start provides separate templates for these options. It also lets you 
 
 === Oracle Database 12c Editions
 
-This Quick Start requires Oracle Database 12c Enterprise Edition, which is the only edition that includes Oracle Data Guard. 
+This Quick Start requires Oracle Database 12c Enterprise Edition.
+
 In Oracle Database 12c Enterprise Edition, you can choose to use the standard Linux file system (e.g., ext4) or Automatic Storage Management (ASM) to store your data files, redo logs, and archived logs. This Quick Start deploys an ASM infrastructure, which provides better performance and file management than the standard Linux file system. Oracle ASM supports automatic file management and data striping across multiple EBS volumes, providing high performance and an easy way to scale your storage area.
 
 :xrefstyle: short
@@ -36,9 +37,9 @@ This Quick Start gives you a choice of General Purpose SSD (gp2) volumes or Prov
 
 Setting an ASM disk group to several gp2 volumes provides a burst capability per EBS volume of up to 3,000 IOPS, which means 18,000 IOPS for a six-volume DATA disk group and 9,000 IOPS for a three-volume RECO disk group, even with disks as small as 1 GiB.
 
-For sustained IOPS, each 1-GiB gp2 volume delivers 3 IOPS until the maximum of 48,000 IOPS is reached.  So with our six-volume data disks, the maximum I/O throughput is achieved with 2,666 GiB volumes (x 6 = 16,000 GiB disk group) or higher volumes. 
+For sustained IOPS, each 1-GiB gp2 volume delivers 3 IOPS until the maximum of 16,000 IOPS is reached. Also certain large EC2 instances can support maximum of 80,000 IOPS. Refer to Amazon EBS–optimized instances for additional information on maximum IOPS supported by each instance type. So with our six-volume data disks, the maximum I/O throughput is achieved with 4,444 GiB volumes (x 6 = 26,667 GiB disk group) or higher volumes. 
 
-For sustained IOPS that is higher than 3 IOPS/GiB, you can use io1 volumes. This option typically addresses the needs of critical business applications that require sustained IOPS performance or more than 10,000 IOPS or 160 MiB/s of throughput per volume, and can then achieve 500 MiB/s per volume for volumes created after June 12, 2017.
+For sustained IOPS that is higher than 3 IOPS/GiB, you can use io1 volumes. This option typically addresses the needs of critical business applications that require sustained IOPS performance or more than 16,000 IOPS or 250 MiB/s of throughput per volume, and can then achieve 500 MiB/s per volume. Provisioned IOPS instances can provide maximum throughput of 1,000 MiB/s when provisioned with more than 32,000 IOPS on Nitro system based instance types. For more information refer to Amazon EBS volume types.
 
 If you choose Provisioned IOPS (io1) volumes, you will need to provide the amount of IOPS desired for both DATA and RECO volumes.
 

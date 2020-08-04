@@ -1,10 +1,10 @@
 :quickstart-project-name: quickstart-oracle-database
 :partner-product-name: Oracle Database
-:partner-company-name: Oracle
+:partner-company-name: AWS solutions architects
 :doc-month: January
 :doc-year: 2018
 :partner-contributors:
-:quickstart-contributors: Hugo Rozestraten and Santiago Cardenas, Amazon Web Services
+:quickstart-contributors: Ravi Madabhushanam and Tony Bulding, Amazon Web Services
 :deployment_time: 1 hour
 :default_deployment_region: us-west-2
 //:production_build:
