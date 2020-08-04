@@ -31,7 +31,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Data Guard
@@ -98,7 +97,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Data Guard
@@ -165,7 +163,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Data Guard
@@ -232,7 +229,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Data Guard
@@ -299,7 +295,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Single
@@ -366,7 +361,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Single
@@ -433,7 +427,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Single
@@ -500,7 +493,6 @@ tests:
     parameters:
       AsmPass: $[taskcat_genpass_30]
       AvailabilityZones: $[taskcat_genaz_2]
-      BastionAMIOS: Amazon-Linux-HVM
       BastionInstanceType: t2.micro
       CharacterSet: AL32UTF8
       DataGuardConfig: Single
