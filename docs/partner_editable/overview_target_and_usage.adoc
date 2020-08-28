@@ -1,0 +1,9 @@
+// Replace the content in <>
+// Identify your target audience and explain how/why they would use this Quick Start.
+//Avoid borrowing text from third-party websites (copying text from AWS service documentation is fine). Also, avoid marketing-speak, focusing instead on the technical aspect.
+
+This Quick Start reference deployment guide provides step-by-step instructions for deploying {partner-product-name} on the AWS Cloud.
+
+AWS provides a secure infrastructure to run your {partner-product-name} with an enterprise class architecture, high availability, and support for small, medium, and large databases. If you have an {partner-product-name} that is larger than 64 TiB, requires IOPS more than 80,000 or a database that relies on features that are not currently supported by Amazon Relational Database Service (Amazon RDS), which is the AWS database platform, you can install your own {partner-product-name} in the AWS virtual computing environment and manage it from your data center. https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_Oracle.html[More information on supported and unsupported features on Amazon RDS for Oracle is available in Amazon Relation Database services User Guide].
+
+This guide is for database administrators, enterprise architects, system administrators, and developers who would like to run their Oracle Database in a highly available Amazon Elastic Compute Cloud (Amazon EC2) environment, using Oracle Data Guard and Oracle Automatic Storage Management (ASM).

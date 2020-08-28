@@ -1,0 +1,6 @@
+// Include details about the license and how they can sign up. If no license is required, clarify that. 
+
+This deployment uses a Bring Your Own License (BYOL) model for {partner-product-name} Enterprise Edition. You must already own licenses for Oracle Database Enterprise Edition, and you must have access to the http://www.oracle.com/technetwork/index.html[Oracle Technology Network] to download the software. 
+
+// Or, if the deployment uses an AMI, update this paragraph. If it doesn’t, remove the paragraph.
+This Quick Start launches the Amazon Machine Image (AMI) for the Red Hat Enterprise Linux (RHEL) or Oracle Linux operating system. 
