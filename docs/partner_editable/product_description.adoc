@@ -29,16 +29,13 @@ The following table describes the replication methods associated with Oracle Dat
 [cols="3",options="header",grid=rows,frame=topbot]
 |===
 |Protection mode  |Replication | Behavior
-|*Maximum performance*
-(default)
+|*Maximum performance* (default)
 |Asynchronous
 |Primary database performance is not affected by any delays writing redo data to the standby database.
-|*Maximum availability*
-(default)
+|*Maximum availability* (default)
 |Synchronous
 |Commit occurs when all redo data needed to recover transactions has been written to the online redo log and to at least one synchronized standby database. If Data Guard is not able to write to the standby database, behavior will be similar to the maximum performance protection mode.
-|*Maximum protection*
-(default)
+|*Maximum protection* (default)
 |Synchronous
 |Changes must be written to both the online redo log and to the standby database for every transaction. If Data Guard is unable to write the redo stream to at least one standby, it will shut down the primary instance.
 |===
