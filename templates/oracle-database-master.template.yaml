@@ -198,11 +198,11 @@ Parameters:
     Type: String
   BastionAMIOS:
     AllowedValues:
-      - Amazon-Linux-HVM
+      - Amazon-Linux2-HVM
       - CentOS-7-HVM
-      - Ubuntu-Server-14.04-LTS-HVM
-      - Ubuntu-Server-16.04-LTS-HVM
-    Default: Amazon-Linux-HVM
+      - Ubuntu-Server-20.04-LTS-HVM
+      - SUSE-SLES-15-HVM
+    Default: Amazon-Linux2-HVM
     Description: The Linux distribution for the AMI to be used for the bastion instances
     Type: String
   BastionBanner:
@@ -560,7 +560,6 @@ Resources:
         PublicSubnet2CIDR: !Ref 'PublicSubnet2CIDR'
         VPCCIDR: !Ref 'VPCCIDR'
   BastionStack:
-    DependsOn: VPCStack
     Type: AWS::CloudFormation::Stack
     Properties:
       TemplateURL:

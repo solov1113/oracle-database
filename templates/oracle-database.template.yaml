@@ -665,7 +665,7 @@ Resources:
       Type: A
       ResourceRecords:
         - !Ref 'PrimaryIPAddress'
-      TTL: '60'
+      TTL: 60
   InstanceRoleOrcl:
     Type: AWS::IAM::Role
     Properties:
@@ -734,16 +734,16 @@ Resources:
       GroupDescription: Oracle server management and access ports
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
+          FromPort: 22
+          ToPort: 22
           SourceSecurityGroupId: !Ref 'BastionSecurityGroupID'
         - IpProtocol: tcp
           FromPort: !Ref 'DatabasePort'
           ToPort: !Ref 'DatabasePort'
           SourceSecurityGroupId: !Ref 'OracleServerAccessSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '5500'
-          ToPort: '5500'
+          FromPort: 5500
+          ToPort: 5500
           SourceSecurityGroupId: !Ref 'OracleServerAccessSecurityGroup'
   OracleServersSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -752,42 +752,42 @@ Resources:
       GroupDescription: Oracle inter-server communication and management ports
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '22'
-          ToPort: '22'
+          FromPort: 22
+          ToPort: 22
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
           FromPort: !Ref 'DatabasePort'
           ToPort: !Ref 'DatabasePort'
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '5500'
-          ToPort: '5500'
+          FromPort: 5500
+          ToPort: 5500
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '111'
-          ToPort: '111'
+          FromPort: 111
+          ToPort: 111
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '2049'
-          ToPort: '2049'
+          FromPort: 2049
+          ToPort: 2049
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '32768'
-          ToPort: '32768'
+          FromPort: 32768
+          ToPort: 32768
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '44182'
-          ToPort: '44182'
+          FromPort: 44182
+          ToPort: 44182
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
         - IpProtocol: tcp
-          FromPort: '54508'
-          ToPort: '54508'
+          FromPort: 54508
+          ToPort: 54508
           SourceSecurityGroupId: !Ref 'OracleServerSecurityGroup'
   LogGroup:
     Condition: CWL
     Type: AWS::Logs::LogGroup
     Properties:
-      RetentionInDays: '7'
+      RetentionInDays: 7
   PrimaryInstance:
     Type: AWS::EC2::Instance
     Metadata:
@@ -989,7 +989,7 @@ Resources:
     Properties:
       EbsOptimized: !If
         - EBSOptimizableInstance
-        - 'true'
+        - true
         - !Ref 'AWS::NoValue'
       IamInstanceProfile: !Ref 'InstanceProfileOrcl'
       ImageId: !FindInMap
@@ -1007,11 +1007,11 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/xvda
           Ebs:
-            VolumeSize: '20'
+            VolumeSize: 20
             VolumeType: gp2
         - DeviceName: /dev/xvdb
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
         - DeviceName: /dev/xvdc
           Ebs:
@@ -1087,11 +1087,11 @@ Resources:
               - !Ref 'AWS::NoValue'
         - DeviceName: /dev/xvdx
           Ebs:
-            VolumeSize: '25'
+            VolumeSize: 25
             VolumeType: gp2
         - DeviceName: /dev/xvdy
           Ebs:
-            VolumeSize: '1'
+            VolumeSize: 1
             VolumeType: gp2
       UserData: !Base64
         Fn::Join:
@@ -1199,8 +1199,8 @@ Resources:
         - !Ref 'OracleServersSecurityGroup'
       PrivateIpAddresses:
         - PrivateIpAddress: !Ref 'PrimaryIPAddress'
-          Primary: 'true'
-      SourceDestCheck: 'true'
+          Primary: true
+      SourceDestCheck: true
       SubnetId: !Ref 'PrivateSubnet1ID'
       Tags:
         - Key: Name
@@ -1511,7 +1511,7 @@ Resources:
     Properties:
       EbsOptimized: !If
         - EBSOptimizableInstance
-        - 'true'
+        - true
         - !Ref 'AWS::NoValue'
       IamInstanceProfile: !Ref 'InstanceProfileOrcl'
       ImageId: !FindInMap
@@ -1529,11 +1529,11 @@ Resources:
       BlockDeviceMappings:
         - DeviceName: /dev/xvda
           Ebs:
-            VolumeSize: '20'
+            VolumeSize: 20
             VolumeType: gp2
         - DeviceName: /dev/xvdb
           Ebs:
-            VolumeSize: '50'
+            VolumeSize: 50
             VolumeType: gp2
         - DeviceName: /dev/xvdc
           Ebs:
@@ -1609,7 +1609,7 @@ Resources:
               - !Ref 'AWS::NoValue'
         - DeviceName: /dev/xvdx
           Ebs:
-            VolumeSize: '25'
+            VolumeSize: 25
             VolumeType: gp2
       UserData: !Base64
         Fn::Join:
@@ -1706,8 +1706,8 @@ Resources:
         - !Ref 'OracleServersSecurityGroup'
       PrivateIpAddresses:
         - PrivateIpAddress: !Ref 'StandbyIPAddress'
-          Primary: 'true'
-      SourceDestCheck: 'true'
+          Primary: true
+      SourceDestCheck: true
       SubnetId: !Ref 'PrivateSubnet2ID'
       Tags:
         - Key: Name
