@@ -400,7 +400,7 @@ For this scenario, you should also consider replicating your backup objects in a
 [link=images/appendix_a_1.png]
 image::../images/appendix_a_1.png[appendix_a_1,width=648,height=439]
 
-== Appendix B: 
+== Appendix B 
 === Adding Disks to ASM Disk Groups 
 
 After deployment, you might need more space for data files or archived log files. To gain more space, you can add EBS volumes to your DATA and RECO disk groups.
