@@ -1,0 +1,52 @@
+// If no preperation is required, remove all content from here
+
+==== Prepare for the deployment
+
+. Download the Oracle Database Software
+..	Go to the Oracle Database Software Downloads webpage to download the binaries for http://www.oracle.com/technetwork/database/enterprise-edition/downloads/oracle12c-linux-12201-3608234.html[Oracle Database 12c Release 2 (12.2.0.1)] or http://www.oracle.com/technetwork/database/enterprise-edition/downloads/database12c-linux-download-2240591.html[Oracle Database 12c Release 1 (12.1.0.2)].
+..	Go to the http://www.oracle.com/technetwork/server-storage/linux/asmlib/rhel7-2773795.html[Oracle Linux Downloads webpage] and download the Oracle Automatic Storage Management (ASM) Libraries.
+
+[cols="2",options="header",grid=rows,frame=topbot]
+|===
+|Product or component | Files to download and save in your S3 bucket
+|*Oracle Grid Infrastructure Release 1*
+|linuxamd64_12102_grid_1of2.zip
+linuxamd64_12102_grid_2of2.zip
+|*Oracle Database Enterprise Edition Release 1*
+|linuxamd64_12102_database_1of2.zip
+linuxamd64_12102_database_2of2.zip
+|*Oracle Grid Infrastructure Release 2*
+|linuxx64_12201_grid_home.zip 
+|*Oracle Database Enterprise Edition Release 2*
+|linuxx64_12201_database.zip
+|*Oracle Automatic Storage Management (ASM) Libraries*
+|http://www.oracle.com/technetwork/server-storage/linux/asmlib/rhel6-1940776.html[oracleasmlib-2.0.4-1.el6.x86_64.rpm] +
+http://www.oracle.com/technetwork/server-storage/linux/asmlib/rhel6-1940776.html[oracleasm-support-2.1.8-1.el6.x86_64.rpm] 
+|===
+
+[start=2]
+. Set up your S3 bucket by following the https://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.htm[instructions in the AWS documentation].
+*	You must place the S3 bucket in the same account (and preferably in the same Region) where you're planning to launch the Quick Start. 
+*	Bucket name and key prefixes may only consist of letters, numbers, and hyphens (-).
+
+.	Place the unextracted downloads in the S3 bucket, as shown in <<staging_downloads>>.
+
+* For better organization of objects in this bucket, you should place the binaries in a subfolder (subkey) of the bucket, e.g., bucket-name/path/to/binaries. 
+* When you launch the Quick Start, you must specify this complete bucket name and key prefix in the Binaries Bucket Name and Binaries Bucket Key Prefix parameter. For example, you may place the binaries for Oracle 12.1 in S3://my-downaloads-bucket/oracle/121/ and Oracle 12.2 can be placed in S3://my-downloads-bucklet/oracle/122/.
+* Crosscheck that the following Oracle downloads are in the bucket before proceeding.
+
+.. linuxamd64_12102_database_1of2.zip +
+linuxamd64_12102_database_2of2.zip +
+linuxamd64_12102_grid_1of2.zip + 
+linuxamd64_12102_grid_2of2.zip for Oracle 12.1.0.2 Version
+.. linuxx64_12201_database.zip +
+linuxx64_12201_grid_home.zip for Oracle 12.2.0.1 Version +
+oracleasm-support-2.1.8-1.el6.x86_64.rpm +
+oracleasmlib-2.0.4-1.el6.x86_64.rpm for Oracle Linux 6.7 or RHEL 7.2 +
+oracleasmlib-2.0.12-1.el7.x86_64.rpm for Oracle Linux 7.3.
+
+:xrefstyle: short
+[#staging_downloads]
+.Staging downloads in the S3 bucket
+[link=images/staging_downloads.png]
+image::../images/staging_downloads.png[staging_downloads,width=648,height=439]
