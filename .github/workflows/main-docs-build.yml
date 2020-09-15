@@ -3,13 +3,14 @@ name: main-documentation
 on:
   push:
     branches:
+    - master
     - main
 jobs:
   build-adocs:
     runs-on: ubuntu-18.04
     name: asciidoc builder
     steps:
-    - name: Checkout (master)
+    - name: Checkout (main)
       uses: actions/checkout@v2
     - name: Get new doc updates
       run: |
