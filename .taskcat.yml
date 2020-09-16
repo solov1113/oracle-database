@@ -61,8 +61,6 @@ tests:
       QSS3BucketRegion: $[taskcat_current_region]
     regions:
       - ap-northeast-1
-      - ap-southeast-2
-      - eu-central-1
       - us-east-1
       - us-west-1
     template: templates/oracle-database-master.template.yaml
@@ -111,8 +109,6 @@ tests:
       - ap-south-1
       - ca-central-1
       - eu-west-1
-      - us-east-2
-      - us-west-2
     template: templates/oracle-database-master.template.yaml  
   master-defaults-12102-rhel72:
     parameters:
@@ -158,9 +154,7 @@ tests:
     regions:
       - ap-northeast-1
       - ap-south-1
-      - ap-southeast-1
       - eu-central-1
-      - us-east-2
     template: templates/oracle-database-master.template.yaml
   master-defaults-12201-ol73:
     parameters:
@@ -205,8 +199,6 @@ tests:
       QSS3BucketRegion: $[taskcat_current_region]
     regions:
       - ap-southeast-1
-      - eu-central-1
-      - eu-west-1
       - us-east-1
       - us-west-1
     template: templates/oracle-database-master.template.yaml
@@ -254,8 +246,6 @@ tests:
     regions:
       - ap-south-1
       - ap-southeast-1
-      - ca-central-1
-      - eu-west-2
       - us-west-1
     template: templates/oracle-database-master.template.yaml
   master-single-12102-ol73:
@@ -301,8 +291,6 @@ tests:
       QSS3BucketRegion: $[taskcat_current_region]
     regions:
       - ap-northeast-1
-      - ap-northeast-2
-      - ap-southeast-2
       - eu-central-1
       - us-west-2
     template: templates/oracle-database-master.template.yaml  
@@ -348,8 +336,6 @@ tests:
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
     regions:
-      - ap-northeast-1
-      - ap-southeast-1
       - eu-west-1
       - us-east-1
       - us-west-1
@@ -396,9 +382,7 @@ tests:
       QSS3BucketName: $[taskcat_autobucket]
       QSS3BucketRegion: $[taskcat_current_region]
     regions:
-      - ap-northeast-2
       - ap-south-1
-      - ap-southeast-2
       - eu-west-2
       - us-east-2
     template: templates/oracle-database-master.template.yaml  
