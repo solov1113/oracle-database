@@ -383,7 +383,7 @@ Parameters:
       - Red-Hat-Enterprise-Linux-7.2-HVM
       - Oracle-Linux-7.3-HVM
     Default: Red-Hat-Enterprise-Linux-7.2-HVM
-    Description: Operating system and version for master/worker nodes.
+    Description: Operating system and version for main/worker nodes.
     Type: String
   OracleInstanceType:
     AllowedValues:
