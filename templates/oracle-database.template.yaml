@@ -1111,6 +1111,7 @@ Resources:
             - "echo '[Update Operating System]'\n"
             - "qs_update-os || qs_error\n"
             - "qs_bootstrap_pip || qs_error\n"
+            - "pip install pystache==0.5.4\n"
             - "qs_aws-cfn-bootstrap || qs_error\n"
             - !If
               - CWL
