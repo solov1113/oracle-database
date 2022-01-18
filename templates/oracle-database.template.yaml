@@ -669,8 +669,8 @@ Resources:
   InstanceRoleOrcl:
     Type: AWS::IAM::Role
     Properties:
-      ManagedPolicyArns: !Sub
-        - arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AmazonEC2RoleforSSM
       Policies:
         - PolicyDocument:
             Version: '2012-10-17'
@@ -702,8 +702,8 @@ Resources:
                     - logs:CreateLogStream
                     - logs:PutLogEvents
                     - logs:DescribeLogStreams
-                  Resource: !Sub 
-                    - arn:${AWS::Partition}:logs:*:*:*
+                  Resource:
+                    - !Sub arn:${AWS::Partition}:logs:*:*:*
             PolicyName: aws-quick-start-cloudwatchlogs-policy
           - !Ref 'AWS::NoValue'
       Path: /
