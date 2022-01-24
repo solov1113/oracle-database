@@ -670,7 +670,7 @@ Resources:
     Type: AWS::IAM::Role
     Properties:
       ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/AmazonSSMManagedInstanceCore
       Policies:
         - PolicyDocument:
             Version: '2012-10-17'
@@ -703,7 +703,7 @@ Resources:
                     - logs:PutLogEvents
                     - logs:DescribeLogStreams
                   Resource:
-                    - arn:aws:logs:*:*:*
+                    - !Sub arn:${AWS::Partition}:logs:*:*:*
             PolicyName: aws-quick-start-cloudwatchlogs-policy
           - !Ref 'AWS::NoValue'
       Path: /
@@ -1111,6 +1111,7 @@ Resources:
             - "echo '[Update Operating System]'\n"
             - "qs_update-os || qs_error\n"
             - "qs_bootstrap_pip || qs_error\n"
+            - "pip install pystache==0.5.4\n"
             - "qs_aws-cfn-bootstrap || qs_error\n"
             - !If
               - CWL
@@ -1625,6 +1626,7 @@ Resources:
             - "echo '[Update Operating System]'\n"
             - "qs_update-os || qs_error\n"
             - "qs_bootstrap_pip || qs_error\n"
+            - "pip install pystache==0.5.4\n"
             - "qs_aws-cfn-bootstrap || qs_error\n"
             - !If
               - CWL
